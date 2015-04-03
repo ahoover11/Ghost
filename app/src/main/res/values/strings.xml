@@ -10,5 +10,10 @@
     <string name="Player2">Player 2:</string>
     <string name="Player3">Player 3:</string>
     <string name="Player4">Player 4:</string>
+    <string name="Submit">Submit</string>
+    <string name="Challenge">Challenge</string>
+    <string name="DefaultWord">WORD</string>
+   
+    <string name="DefaultLetter">A</string>
 
 </resources>

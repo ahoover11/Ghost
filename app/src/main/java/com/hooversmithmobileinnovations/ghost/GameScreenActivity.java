@@ -1,19 +1,34 @@
 package com.hooversmithmobileinnovations.ghost;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class GameScreenActivity extends ActionBarActivity {
+public class GameScreenActivity extends Activity {
+    TextView currentLetter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-    }
+        currentLetter = (TextView) findViewById(R.id.textViewCurrentLetter);
 
+    }
+    public void LetterClicked(View v)
+    {
+        Resources res = getResources();
+       String letter=  res.getResourceEntryName(v.getId());
+        currentLetter.setText(letter);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
