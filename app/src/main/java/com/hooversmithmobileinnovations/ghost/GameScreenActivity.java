@@ -10,10 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Vibrator;
 
 
 public class GameScreenActivity extends Activity {
     TextView currentLetter;
+    private Vibrator myVib;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +23,13 @@ public class GameScreenActivity extends Activity {
         setContentView(R.layout.activity_game_screen);
         currentLetter = (TextView) findViewById(R.id.textViewCurrentLetter);
 
+        myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+
     }
     public void LetterClicked(View v)
     {
+
+        myVib.vibrate(80);
         Resources res = getResources();
        String letter=  res.getResourceEntryName(v.getId());
         currentLetter.setText(letter);
