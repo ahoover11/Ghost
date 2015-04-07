@@ -15,5 +15,8 @@
     <string name="DefaultWord">WORD</string>
    
     <string name="DefaultLetter">A</string>
+    <string name="LocalGame">Local Game</string>
+    <string name="P2PGame">P2P GAME</string>
+    <string name="Rules">Rules</string>
 
 </resources>

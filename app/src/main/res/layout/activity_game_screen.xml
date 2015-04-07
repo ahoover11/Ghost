@@ -419,11 +419,10 @@
             android:textSize="40sp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:paddingTop="0dp"
-            android:paddingBottom="15dp"
             android:textStyle="bold"
             android:textColor="#ffff050e"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:layout_marginBottom="15dp" />
     </RelativeLayout>
 
 </RelativeLayout>
