@@ -2,20 +2,39 @@ package com.hooversmithmobileinnovations.ghost;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 
 public class HomeScreenActivity extends Activity {
+
+    Drawable blueghost, redghost, greenghost, orangeghost;
+    CyclicTransitionDrawable ctd;
+    ImageView ghostImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-       startActivity(new Intent(this, GameScreenActivity.class));
+        blueghost = getResources().getDrawable(R.drawable.blueghost);
+        redghost = getResources().getDrawable(R.drawable.redghost);
+        greenghost = getResources().getDrawable(R.drawable.greenghost);
+        orangeghost = getResources().getDrawable(R.drawable.orangeghost);
+
+        ctd = new CyclicTransitionDrawable(new Drawable[] {blueghost,redghost,greenghost,orangeghost});
+
+        ghostImage = (ImageView)findViewById(R.id.imageViewGhost);
+
+        ghostImage.setImageDrawable(ctd);
+
+        ctd.startTransition(1000, 3000);
+
+        //startActivity(new Intent(this, GameScreenActivity.class));
     }
 
 
