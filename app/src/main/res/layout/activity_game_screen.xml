@@ -267,7 +267,7 @@
             android:weightSum="4">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/Player1"
                 android:layout_weight="1"
@@ -278,18 +278,18 @@
                 android:gravity="center_horizontal" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:text="@string/Ghost"
                 android:id="@+id/textViewPlayer1Score"
                 android:background="@drawable/grid"
                 android:layout_weight="1"
                 android:textSize="18sp"
                 android:textColor="#000"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                android:text="@string/Ghost" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/Player2"
                 android:background="@drawable/grid"
@@ -300,7 +300,7 @@
                 android:gravity="center_horizontal" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/Ghost"
                 android:background="@drawable/grid"
@@ -319,7 +319,7 @@
             android:weightSum="4" >
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/Player3"
                 android:layout_weight="1"
@@ -330,7 +330,7 @@
                 android:gravity="center_horizontal" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/Ghost"
                 android:id="@+id/textViewPlayer3Score"
@@ -341,7 +341,7 @@
                 android:gravity="center_horizontal" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/Player4"
                 android:id="@+id/textViewPlayer4Name"
@@ -352,7 +352,7 @@
                 android:gravity="center_horizontal" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:text="@string/Ghost"
                 android:id="@+id/textViewPlayer4Score"
@@ -377,7 +377,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/linearLayout"
-        android:layout_above="@+id/relativeLayout" />
+        android:layout_above="@+id/relativeLayout"
+        android:nestedScrollingEnabled="false" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -392,11 +393,13 @@
             android:background="@drawable/letterbutton"
             android:text="@string/Submit"
             android:id="@+id/buttonSubmit"
+            android:onClick="onSubmit"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_width="130dp"
-            android:textColor="#000" />
+            android:textColor="#000"
+            android:layout_marginBottom="15dp" />
 
         <Button
             style="@style/standard_button"
@@ -407,13 +410,13 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_width="130dp"
-            android:textColor="#000" />
+            android:textColor="#000"
+            android:layout_marginBottom="15dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/DefaultLetter"
 
             android:id="@+id/textViewCurrentLetter"
             android:textSize="40sp"
@@ -422,7 +425,10 @@
             android:textStyle="bold"
             android:textColor="#ffff050e"
             android:gravity="center_vertical"
-            android:layout_marginBottom="15dp" />
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="top"
+            android:textAlignment="center"
+            android:text="A" />
     </RelativeLayout>
 
 </RelativeLayout>
