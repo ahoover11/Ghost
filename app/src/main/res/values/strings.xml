@@ -18,5 +18,6 @@
     <string name="LocalGame">Local Game</string>
     <string name="P2PGame">P2P GAME</string>
     <string name="Rules">Rules</string>
+    <string name="StartTurn">Begin!</string>
 
 </resources>

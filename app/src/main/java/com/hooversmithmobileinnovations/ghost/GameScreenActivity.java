@@ -1,22 +1,38 @@
 package com.hooversmithmobileinnovations.ghost;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Dialog;
 import android.os.Vibrator;
+import android.view.ViewGroup.LayoutParams;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.widget.Button;
+import android.view.Window;
 
 
 public class GameScreenActivity extends Activity {
     TextView currentLetterTextView;
     TextView currentWordTextView;
+
+    Drawable blueghost, redghost, greenghost, orangeghost;
 
     int currentPlayer;
     int maxPlayerNumber;
@@ -24,6 +40,7 @@ public class GameScreenActivity extends Activity {
     TextView playerScoreTextView[];
     TextView playerNameTextView[];
     String playerScore[];
+    String playerNames[];
 
 
     private Vibrator myVib;
@@ -35,8 +52,18 @@ public class GameScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+
+        blueghost = getResources().getDrawable(R.drawable.blueghost);
+        redghost = getResources().getDrawable(R.drawable.redghost);
+        greenghost = getResources().getDrawable(R.drawable.greenghost);
+        orangeghost = getResources().getDrawable(R.drawable.orangeghost);
+
         maxPlayerNumber = 4;
         playerScore = new String[maxPlayerNumber];
+        //TODO have this from input
+        numberOfPlayers = 4;
+        //TODO
+        playerNames = new String[numberOfPlayers];
 
         ///////////////////////////////
         for (int i = 0; i <maxPlayerNumber;i++)
@@ -47,9 +74,11 @@ public class GameScreenActivity extends Activity {
         currentWord = "";
 
         currentPlayer = 0;
-         //TODO have this from input
-        numberOfPlayers = 4;
-        //TODO
+        playerNames[0] = "Player 1";
+        playerNames[1] = "Player 2";
+        playerNames[2] = "Player 3";
+        playerNames[3] = "Player 4";
+
     ///////////////////////////////////////////
 
 
@@ -79,6 +108,7 @@ public class GameScreenActivity extends Activity {
         for(int i = 0; i < maxPlayerNumber; i++)
         {
             playerScoreTextView[i].setText(playerScore[i]);
+            playerNameTextView[i].setText(playerNames[i]);
         }
         for (int i = numberOfPlayers; i < maxPlayerNumber;i++)
         {
@@ -129,18 +159,57 @@ public class GameScreenActivity extends Activity {
     }
     private void playerTurn(int player)
     {
-        //TODO Change if turn order different
+
         for (int i = 0; i < numberOfPlayers; i++)
         {
             playerNameTextView[i].setTextColor(Color.BLACK);
         }
         playerNameTextView[player].setTextColor(Color.BLUE);
+
+        // Dialog
+        final Dialog dialog = new Dialog(GameScreenActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.next_turn_popup);
+
+        TextView text = (TextView) dialog.findViewById(R.id.popupPlayerTextView);
+       text.setText(playerNames[player]);
+        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+        switch (player){
+            case 0 :
+                image.setImageResource(R.drawable.blueghost);
+                break;
+            case 1:
+                image.setImageResource(R.drawable.redghost);
+                break;
+            case 2:
+                image.setImageResource(R.drawable.greenghost);
+                break;
+            case 3:
+                image.setImageResource(R.drawable.orangeghost);
+                break;
+        }
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false); //disable back button out
+        dialog.show();
+
     }
+
+
 
     private boolean validWord(String word)
     {
         return false; /// Check whether current word is a valid word
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
