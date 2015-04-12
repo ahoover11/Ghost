@@ -29,23 +29,12 @@ import android.view.Window;
 
 
 public class GameScreenActivity extends Activity {
-    TextView currentLetterTextView;
-    TextView currentWordTextView;
 
-    Drawable blueghost, redghost, greenghost, orangeghost;
-
-    int currentPlayer;
-    int maxPlayerNumber;
-    int numberOfPlayers;
-    TextView playerScoreTextView[];
-    TextView playerNameTextView[];
-    String playerScore[];
-    String playerNames[];
-
-
-    private Vibrator myVib;
-    String currentWord;
-    String currentLetter;
+    TextView currentLetterTextView, currentWordTextView, playerScoreTextView[], playerNameTextView[];
+    Drawable blueGhost, redGhost, greenGhost, orangeGhost;
+    int currentPlayer, maxPlayerNumber, numberOfPlayers;
+    String currentWord, currentLetter, playerScore[], playerNames[];
+    Vibrator myVib;
 
 
     @Override
@@ -53,10 +42,10 @@ public class GameScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
 
-        blueghost = getResources().getDrawable(R.drawable.blueghost);
-        redghost = getResources().getDrawable(R.drawable.redghost);
-        greenghost = getResources().getDrawable(R.drawable.greenghost);
-        orangeghost = getResources().getDrawable(R.drawable.orangeghost);
+        blueGhost = getResources().getDrawable(R.drawable.blueghost);
+        redGhost = getResources().getDrawable(R.drawable.redghost);
+        greenGhost = getResources().getDrawable(R.drawable.greenghost);
+        orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
 
         maxPlayerNumber = 4;
         playerScore = new String[maxPlayerNumber];

@@ -7,12 +7,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.view.View;
 
 public class HomeScreenActivity extends Activity {
 
-    Drawable blueghost, redghost, greenghost, orangeghost;
+    Drawable blueGhost, redGhost, greenGhost, orangeGhost;
+    Button buttonLocalGame, buttonP2PGame, buttonRules;
     CyclicTransitionDrawable ctd;
     ImageView ghostImage;
 
@@ -21,26 +23,37 @@ public class HomeScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        blueghost = getResources().getDrawable(R.drawable.blueghost);
-        redghost = getResources().getDrawable(R.drawable.redghost);
-        greenghost = getResources().getDrawable(R.drawable.greenghost);
-        orangeghost = getResources().getDrawable(R.drawable.orangeghost);
+        blueGhost = getResources().getDrawable(R.drawable.blueghost);
+        redGhost = getResources().getDrawable(R.drawable.redghost);
+        greenGhost = getResources().getDrawable(R.drawable.greenghost);
+        orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
 
-        ctd = new CyclicTransitionDrawable(new Drawable[] {blueghost,redghost,greenghost,orangeghost});
+        buttonLocalGame = (Button)findViewById(R.id.buttonLocalGame);
+        buttonP2PGame = (Button)findViewById(R.id.buttonP2PGame);
+        buttonRules = (Button)findViewById(R.id.buttonRules);
+
+        ctd = new CyclicTransitionDrawable(new Drawable[] {blueGhost,redGhost,greenGhost,orangeGhost});
 
         ghostImage = (ImageView)findViewById(R.id.imageViewGhost);
 
         ghostImage.setImageDrawable(ctd);
 
         ctd.startTransition(1000, 3000);
-
-        //startActivity(new Intent(this, GameScreenActivity.class));
     }
 
-public void onLocalGameSelected(View v)
-{
-    startActivity(new Intent(this, GameScreenActivity.class));//go to game screen activity
-}
+    public void onButtonClickedHomeScreen(View v)
+    {
+        if(v == buttonLocalGame){
+            //go to player selection local screen activity
+            startActivity(new Intent(this, PlayerSelectionLocalScreenActivity.class));
+        }else if(v == buttonP2PGame){
+            //go to player selection p2p screen activity
+
+        }else if(v == buttonRules){
+            //display game rules
+
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

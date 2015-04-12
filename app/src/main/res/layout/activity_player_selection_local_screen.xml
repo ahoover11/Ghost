@@ -1,0 +1,153 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.hooversmithmobileinnovations.ghost.PlayerSelectionLocalScreenActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/HLinearLayout1">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageViewBlueGhost"
+            android:src="@drawable/grayghost"
+            android:layout_marginTop="10dp"
+            android:onClick="cyclePlayerType" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextPlayer1Name"
+            android:layout_weight="1"
+            android:textSize="30sp"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/HLinearLayout1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/HLinearLayout2">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageViewRedGhost"
+            android:src="@drawable/grayghost"
+            android:layout_marginTop="10dp"
+            android:onClick="cyclePlayerType" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextPlayer2Name"
+            android:textSize="30sp"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/HLinearLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/HLinearLayout3">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageViewGreenGhost"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/grayghost"
+            android:layout_marginTop="10dp"
+            android:onClick="cyclePlayerType" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextPlayer3Name"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/HLinearLayout3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/HLinearLayout4">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:id="@+id/imageViewOrangeGhost"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/grayghost"
+            android:layout_marginTop="10dp"
+            android:onClick="cyclePlayerType" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextPlayer4Name"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/HLinearLayout4"
+        android:id="@+id/VLinearLayout4">
+
+        <Button
+            style="@style/standard_button3"
+            android:background="@drawable/letterbutton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/Language"
+            android:id="@+id/buttonLanguage"
+            android:layout_gravity="bottom|center"
+            android:layout_marginTop="70dp"
+            android:onClick="onButtonClickedLocalSelectionScreen" />
+
+        <Button
+            style="@style/standard_button3"
+            android:background="@drawable/letterbutton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/StartGame"
+            android:id="@+id/buttonStartGame"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:onClick="onButtonClickedLocalSelectionScreen" />
+    </LinearLayout>
+
+</RelativeLayout>

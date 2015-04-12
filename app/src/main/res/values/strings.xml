@@ -19,5 +19,8 @@
     <string name="P2PGame">P2P GAME</string>
     <string name="Rules">Rules</string>
     <string name="StartTurn">Begin!</string>
+    <string name="title_activity_player_selection_screen">PlayerSelectionScreenActivity</string>
+    <string name="Language">Language</string>
+    <string name="StartGame">Start Game</string>
 
 </resources>

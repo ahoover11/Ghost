@@ -12,7 +12,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/lLayout">
+        android:id="@+id/VLinearLayout1">
 
         <Button
             style="@style/standard_button2"
@@ -22,18 +22,19 @@
             android:layout_gravity="center_horizontal"
             android:textColor="#000"
             android:layout_width="150dp"
-            android:layout_above="@+id/lLayout"
+            android:layout_above="@+id/VLinearLayout1"
             android:layout_centerHorizontal="true"
-            android:onClick="onLocalGameSelected"/>
+            android:onClick="onButtonClickedHomeScreen" />
 
         <Button
+            style="@style/standard_button2"
             android:text="@string/P2PGame"
             android:id="@+id/buttonP2PGame"
             android:layout_gravity="center_horizontal"
             android:textColor="#000"
             android:layout_width="150dp"
             android:background="@drawable/letterbutton"
-            style="@style/standard_button2" />
+            android:onClick="onButtonClickedHomeScreen" />
 
         <Button
             style="@style/standard_button2"
@@ -42,7 +43,8 @@
             android:id="@+id/buttonRules"
             android:layout_gravity="center_horizontal"
             android:textColor="#000"
-            android:layout_width="150dp" />
+            android:layout_width="150dp"
+            android:onClick="onButtonClickedHome" />
 
     </LinearLayout>
 
