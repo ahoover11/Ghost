@@ -50,7 +50,7 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
         playerNames[1] = (EditText)findViewById(R.id.editTextPlayer2Name);
         playerNames[2] = (EditText)findViewById(R.id.editTextPlayer3Name);
         playerNames[3] = (EditText)findViewById(R.id.editTextPlayer4Name);
-        playerNames[0].setEnabled(false);
+        /*playerNames[0].setEnabled(false);
         playerNames[0].setInputType(InputType.TYPE_NULL);
         playerNames[0].setFocusable(false);
         playerNames[1].setEnabled(false);
@@ -62,6 +62,11 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
         playerNames[3].setEnabled(false);
         playerNames[3].setInputType(InputType.TYPE_NULL);
         playerNames[3].setFocusable(false);
+        */
+        playerNames[0].setVisibility(View.INVISIBLE);
+        playerNames[1].setVisibility(View.INVISIBLE);
+        playerNames[2].setVisibility(View.INVISIBLE);
+        playerNames[3].setVisibility(View.INVISIBLE);
     }
 
     public void onButtonClickedLocalSelectionScreen(View v)
@@ -80,15 +85,17 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             cycleCount1++;
             if(cycleCount1 % 3 == 0){
                 imageViewPlayer1.setImageDrawable(grayGhost);
-                playerNames[0].setText("");
-                playerNames[0].setEnabled(false);
-                playerNames[0].setInputType(InputType.TYPE_NULL);
-                playerNames[0].setFocusable(false);
+                //playerNames[0].setText("");
+                //playerNames[0].setEnabled(false);
+                //playerNames[0].setInputType(InputType.TYPE_NULL);
+                //playerNames[0].setFocusable(false);
+                playerNames[0].setVisibility(View.INVISIBLE);
             }else if(cycleCount1 % 3 == 1){
                 imageViewPlayer1.setImageDrawable(blueGhost);
-                playerNames[0].setEnabled(true);
-                playerNames[0].setInputType(InputType.TYPE_CLASS_TEXT);
-                playerNames[0].setFocusable(true);
+                //playerNames[0].setEnabled(true);
+                //playerNames[0].setInputType(InputType.TYPE_CLASS_TEXT);
+                //playerNames[0].setFocusable(true);
+                playerNames[0].setVisibility(View.VISIBLE);
             }else if(cycleCount1 % 3 == 2){
                 imageViewPlayer1.setImageDrawable(aiPlayer1);
             }
