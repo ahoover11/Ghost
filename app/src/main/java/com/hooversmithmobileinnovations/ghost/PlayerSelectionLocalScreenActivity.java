@@ -40,10 +40,10 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
         greenGhost = getResources().getDrawable(R.drawable.greenghost);
         orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
         grayGhost = getResources().getDrawable(R.drawable.grayghost);
-        aiPlayer1 = getResources().getDrawable(R.drawable.aiplayer1);
-        aiPlayer2 = getResources().getDrawable(R.drawable.aiplayer2);
-        aiPlayer3 = getResources().getDrawable(R.drawable.aiplayer3);
-        aiPlayer4 = getResources().getDrawable(R.drawable.aiplayer4);
+        aiPlayer1 = getResources().getDrawable(R.drawable.aiblue);
+        aiPlayer2 = getResources().getDrawable(R.drawable.aired);
+        aiPlayer3 = getResources().getDrawable(R.drawable.aigreen);
+        aiPlayer4 = getResources().getDrawable(R.drawable.aiorange);
 
         playerNames = new EditText[4];
         playerNames[0] = (EditText)findViewById(R.id.editTextPlayer1Name);
