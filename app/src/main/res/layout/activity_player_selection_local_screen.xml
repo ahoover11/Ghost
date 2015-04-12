@@ -31,7 +31,8 @@
             android:id="@+id/editTextPlayer1Name"
             android:layout_weight="1"
             android:textSize="30sp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:maxLength="8" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,7 +59,8 @@
             android:ems="10"
             android:id="@+id/editTextPlayer2Name"
             android:textSize="30sp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:maxLength="8" />
     </LinearLayout>
 
     <LinearLayout
@@ -87,7 +89,8 @@
             android:id="@+id/editTextPlayer3Name"
             android:textSize="30sp"
             android:layout_weight="1"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:maxLength="8" />
     </LinearLayout>
 
     <LinearLayout
@@ -116,7 +119,8 @@
             android:id="@+id/editTextPlayer4Name"
             android:textSize="30sp"
             android:layout_weight="1"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:maxLength="8" />
     </LinearLayout>
 
     <LinearLayout

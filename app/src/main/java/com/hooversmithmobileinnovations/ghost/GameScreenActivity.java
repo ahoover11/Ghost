@@ -50,9 +50,9 @@ public class GameScreenActivity extends Activity {
         maxPlayerNumber = 4;
         playerScore = new String[maxPlayerNumber];
         //TODO have this from input
-        numberOfPlayers = 4;
+        numberOfPlayers = 2;
         //TODO
-        playerNames = new String[numberOfPlayers];
+        playerNames = new String[maxPlayerNumber];
 
         ///////////////////////////////
         for (int i = 0; i <maxPlayerNumber;i++)

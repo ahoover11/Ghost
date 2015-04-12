@@ -15,8 +15,8 @@
         android:textStyle="bold" />
 
     <ImageView
-        android:layout_width="125dp"
-        android:layout_height="125dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/imageViewGhost"
         android:src="@drawable/blueghost"
         android:longClickable="false"
@@ -33,7 +33,7 @@
         android:text="@string/StartTurn"
         android:id="@+id/popupButton"
         android:onClick="popupButton"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:textColor="#000"
         android:layout_marginBottom="15dp"
         android:layout_gravity="center_horizontal" />
