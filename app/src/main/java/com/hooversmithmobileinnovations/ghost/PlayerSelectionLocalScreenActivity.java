@@ -77,6 +77,7 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             }else if(cycleCount1 % 3 == 1){
                 imageViewPlayer1.setImageDrawable(blueGhost);
                 playerNames[0].setVisibility(View.VISIBLE);
+                playerNames[0].setText(R.string.Player1);
             }else if(cycleCount1 % 3 == 2){
                 imageViewPlayer1.setImageDrawable(aiPlayer1);
             }
@@ -89,6 +90,7 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             }else if(cycleCount2 % 3 == 1){
                 imageViewPlayer2.setImageDrawable(redGhost);
                 playerNames[1].setVisibility(View.VISIBLE);
+                playerNames[1].setText(R.string.Player2);
             }else if(cycleCount2 % 3 == 2){
                 imageViewPlayer2.setImageDrawable(aiPlayer2);
             }
@@ -101,6 +103,7 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             }else if(cycleCount3 % 3 == 1){
                 imageViewPlayer3.setImageDrawable(greenGhost);
                 playerNames[2].setVisibility(View.VISIBLE);
+                playerNames[2].setText(R.string.Player3);
             }else if(cycleCount3 % 3 == 2){
                 imageViewPlayer3.setImageDrawable(aiPlayer3);
             }
@@ -113,6 +116,7 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             }else if(cycleCount4 % 3 == 1){
                 imageViewPlayer4.setImageDrawable(orangeGhost);
                 playerNames[3].setVisibility(View.VISIBLE);
+                playerNames[3].setText(R.string.Player4);
             }else if(cycleCount4 % 3 == 2){
                 imageViewPlayer4.setImageDrawable(aiPlayer4);
             }

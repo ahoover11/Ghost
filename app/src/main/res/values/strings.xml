@@ -5,11 +5,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_game_screen">GameScreenActivity</string>
-    <string name="Player1">Player 1:</string>
+    <string name="Player1">Player 1</string>
     <string name="Ghost">GHOST</string>
-    <string name="Player2">Player 2:</string>
-    <string name="Player3">Player 3:</string>
-    <string name="Player4">Player 4:</string>
+    <string name="Player2">Player 2</string>
+    <string name="Player3">Player 3</string>
+    <string name="Player4">Player 4</string>
     <string name="Submit">Submit</string>
     <string name="Challenge">Challenge</string>
     <string name="DefaultWord">WORD</string>
@@ -22,5 +22,6 @@
     <string name="title_activity_player_selection_screen">PlayerSelectionScreenActivity</string>
     <string name="Language">Language</string>
     <string name="StartGame">Start Game</string>
+    <string name="GHOST">GHOST!</string>
 
 </resources>
