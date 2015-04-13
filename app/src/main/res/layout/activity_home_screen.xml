@@ -44,7 +44,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="#000"
             android:layout_width="150dp"
-            android:onClick="onButtonClickedHome" />
+            android:onClick="onButtonClickedHomeScreen" />
 
     </LinearLayout>
 
