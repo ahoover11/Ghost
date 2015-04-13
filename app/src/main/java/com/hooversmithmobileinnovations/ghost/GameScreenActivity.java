@@ -27,6 +27,8 @@ import android.content.DialogInterface;
 import android.widget.Button;
 import android.view.Window;
 
+import java.util.List;
+
 
 public class GameScreenActivity extends Activity {
 
@@ -35,6 +37,7 @@ public class GameScreenActivity extends Activity {
     int currentPlayer, maxPlayerNumber, numberOfPlayers;
     String currentWord, currentLetter, playerScore[], playerNames[];
     Vibrator myVib;
+    MyDBHandler dbHandler;
 
 
     @Override
@@ -46,11 +49,12 @@ public class GameScreenActivity extends Activity {
         redGhost = getResources().getDrawable(R.drawable.redghost);
         greenGhost = getResources().getDrawable(R.drawable.greenghost);
         orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
-
+        dbHandler = new MyDBHandler(this,null,null,1);
+        //List<String> list = dbHandler.getSuggestions("zip");//For suggestions
         maxPlayerNumber = 4;
         playerScore = new String[maxPlayerNumber];
         //TODO have this from input
-        numberOfPlayers = 2;
+        numberOfPlayers = 4;
         //TODO
         playerNames = new String[maxPlayerNumber];
 
@@ -131,10 +135,11 @@ public class GameScreenActivity extends Activity {
 
             currentWordTextView.setText(currentWord);
             currentLetterTextView.setText("");
-            if (currentWord.length() >= 3) {
-                if (validWord(currentWord)) //if a word is completed start the next round
+            if (currentWord.length() > 3) {
+                if (validWord(currentWord.toLowerCase())) //if a word is completed start the next round
                 {
-
+                    //TODO Assign letter to correct player and begin next round
+                    Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
                 } else {
                     currentPlayer = (currentPlayer + 1) % numberOfPlayers;
                     playerTurn(currentPlayer);
@@ -196,7 +201,7 @@ public class GameScreenActivity extends Activity {
 
     private boolean validWord(String word)
     {
-        return false; /// Check whether current word is a valid word
+        return dbHandler.checkWord(word);
     }
 
 

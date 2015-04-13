@@ -22,7 +22,12 @@ public class HomeScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-
+        /////////////////////////////////////////////////////////////////////
+        //Load Database for first run
+        MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
+        dbHandler.checkWord("Initiate");//Make sure it actually loads
+        dbHandler.close();
+        /////////////////////////////////////////////////////////////////////
         blueGhost = getResources().getDrawable(R.drawable.blueghost);
         redGhost = getResources().getDrawable(R.drawable.redghost);
         greenGhost = getResources().getDrawable(R.drawable.greenghost);
