@@ -26,6 +26,14 @@
             android:name=".PlayerSelectionLocalScreenActivity"
             android:label="@string/title_activity_player_selection_screen" >
         </activity>
+        <activity
+            android:name=".ChallengeActivity"
+            android:label="@string/title_activity_challenge" >
+        </activity>
+        <activity
+            android:name=".ResultsActivity"
+            android:label="@string/title_activity_results" >
+        </activity>
     </application>
 
 </manifest>

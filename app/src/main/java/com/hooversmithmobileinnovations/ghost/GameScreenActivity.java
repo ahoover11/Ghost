@@ -34,10 +34,12 @@ public class GameScreenActivity extends Activity {
 
     TextView currentLetterTextView, currentWordTextView, playerScoreTextView[], playerNameTextView[];
     Drawable blueGhost, redGhost, greenGhost, orangeGhost;
-    int currentPlayer, maxPlayerNumber, numberOfPlayers;
+    int currentPlayer, maxPlayerNumber, numberOfPlayers, playerTurn, lastPlayer;
     String currentWord, currentLetter, playerScore[], playerNames[];
+    boolean playersInGame[];
     Vibrator myVib;
     MyDBHandler dbHandler;
+    static final int Challenge_REQUEST = 1;
 
 
     @Override
@@ -54,23 +56,34 @@ public class GameScreenActivity extends Activity {
         maxPlayerNumber = 4;
         playerScore = new String[maxPlayerNumber];
         //TODO have this from input
-        numberOfPlayers = 4;
+        numberOfPlayers = 2;
+
         //TODO
         playerNames = new String[maxPlayerNumber];
 
         ///////////////////////////////
+        playersInGame = new boolean[maxPlayerNumber];
         for (int i = 0; i <maxPlayerNumber;i++)
         {
             playerScore[i] = "";
         }
+        playerTurn = 0;
         currentLetter = "";
         currentWord = "";
 
-        currentPlayer = 0;
+        playersInGame[0] =true;
+        playersInGame[1] =true;
+        playersInGame[2] =true;
+        playersInGame[3] =true;
+
+        currentPlayer = 0; //first player
+
         playerNames[0] = "Player 1";
         playerNames[1] = "Player 2";
         playerNames[2] = "Player 3";
         playerNames[3] = "Player 4";
+
+        lastPlayer = -1;
 
     ///////////////////////////////////////////
 
@@ -135,17 +148,26 @@ public class GameScreenActivity extends Activity {
 
             currentWordTextView.setText(currentWord);
             currentLetterTextView.setText("");
+
             if (currentWord.length() > 3) {
                 if (validWord(currentWord.toLowerCase())) //if a word is completed start the next round
                 {
-                    //TODO Assign letter to correct player and begin next round
+                    addLetter(currentPlayer);
+                    currentWord = "";
+                    lastPlayer = -1;
+                    currentWordTextView.setText(currentWord);
+                    currentPlayer = nextPlayer(playerTurn);
+                    playerTurn++;
+                    playerTurn(currentPlayer);
                     Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
                 } else {
-                    currentPlayer = (currentPlayer + 1) % numberOfPlayers;
+                    lastPlayer = currentPlayer;
+                    currentPlayer = nextPlayer(currentPlayer);
                     playerTurn(currentPlayer);
                 }
             } else {
-                currentPlayer = (currentPlayer + 1) % numberOfPlayers;
+                lastPlayer = currentPlayer;
+                currentPlayer = nextPlayer(currentPlayer);
                 playerTurn(currentPlayer);
             }
         }
@@ -196,15 +218,93 @@ public class GameScreenActivity extends Activity {
         dialog.show();
 
     }
+    private int nextPlayer(int previousPlayer)
+    {
+        int count = 1;
+        do{
+            if (playersInGame[(previousPlayer+count)%numberOfPlayers])
+            {
+                return (previousPlayer+count)%numberOfPlayers;
+            }
+            count++;
+        }while(count<numberOfPlayers);
+        //TODO ENDGAME ACTIVITY ACTIVATE
+        Intent intent = new Intent(this, ResultsActivity.class);
+        //intent.putExtra("Winner")
+        startActivity(intent);
 
 
+        return 0;
+    }
+    private void addLetter(int player)
+    {
+        switch (playerScore[player].length())
+        {
+            case 0:
+                playerScore[player]+="G";
+                break;
+            case 1:
+                playerScore[player]+="H";
+                break;
+            case 2:
+                playerScore[player]+="O";
+                break;
+            case 3:
+                playerScore[player]+="S";
+                break;
+            case 4:
+                playerScore[player]+="T";
+                playersInGame[player] = false;
+                break;
+        }
+        playerScoreTextView[player].setText(playerScore[player]);
+    }
 
     private boolean validWord(String word)
     {
         return dbHandler.checkWord(word);
     }
 
+    public void onChallenge(View v)
+    {
+        if (lastPlayer>=0)//check that we are not on a new word
+        {
+        Intent intent = new Intent(this, ChallengeActivity.class);
+        int playerBeingChallenged = lastPlayer;
 
+            intent.putExtra("player", playerBeingChallenged);
+            intent.putExtra("currentWord", currentWord);
+
+            startActivityForResult(intent, Challenge_REQUEST);
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(), "No Challenges Yet, wait until the word is started!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data )
+    {
+        if((requestCode==Challenge_REQUEST)&& resultCode == RESULT_OK)
+        {
+            if (data.getExtras().getBoolean("isChallengeWon"))
+            {
+                addLetter(currentPlayer); //add a letter to the player who challenged
+
+            }else
+            {
+                addLetter(lastPlayer); //add a letter for failed challenge
+            }
+            currentWord = "";
+            lastPlayer = -1;
+            currentWordTextView.setText(currentWord);
+            currentPlayer = nextPlayer(playerTurn);
+            playerTurn++;
+            playerTurn(currentPlayer);
+        }
+
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

@@ -13,7 +13,6 @@
     <string name="Submit">Submit</string>
     <string name="Challenge">Challenge</string>
     <string name="DefaultWord">WORD</string>
-   
     <string name="DefaultLetter">A</string>
     <string name="LocalGame">Local Game</string>
     <string name="P2PGame">P2P GAME</string>
@@ -23,5 +22,8 @@
     <string name="Language">Language</string>
     <string name="StartGame">Start Game</string>
     <string name="GHOST">GHOST!</string>
+    <string name="title_activity_challenge">ChallengeActivity</string>
+    <string name="Backspace">Backspace</string>
+    <string name="title_activity_results">ResultsActivity</string>
 
 </resources>

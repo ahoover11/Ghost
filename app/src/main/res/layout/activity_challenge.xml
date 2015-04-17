@@ -3,10 +3,9 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/test2"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.hooversmithmobileinnovations.ghost.GameScreenActivity"
-    >
+    tools:context="com.hooversmithmobileinnovations.ghost.ChallengeActivity"
+    android:nestedScrollingEnabled="false">
 
     <LinearLayout
         android:orientation="vertical"
@@ -264,129 +263,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/VLinearLayout4">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:weightSum="4"
-            android:id="@+id/HLinearLayout8">
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:text="@string/Player1"
-                android:layout_weight="1"
-                android:id="@+id/textViewPlayer1Name"
-                android:background="@drawable/grid"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewPlayer1Score"
-                android:background="@drawable/grid"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal"
-                android:text="@string/Ghost" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:text="@string/Player2"
-                android:background="@drawable/grid"
-                android:id="@+id/textViewPlayer2Name"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:text="@string/Ghost"
-                android:background="@drawable/grid"
-                android:id="@+id/textViewPlayer2Score"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:weightSum="4"
-            android:id="@+id/HLinearLayout9"
-            android:longClickable="false">
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:text="@string/Player3"
-                android:layout_weight="1"
-                android:id="@+id/textViewPlayer3Name"
-                android:background="@drawable/grid"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:text="@string/Ghost"
-                android:id="@+id/textViewPlayer3Score"
-                android:layout_weight="1"
-                android:background="@drawable/grid"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:text="@string/Player4"
-                android:id="@+id/textViewPlayer4Name"
-                android:background="@drawable/grid"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:text="@string/Ghost"
-                android:id="@+id/textViewPlayer4Score"
-                android:background="@drawable/grid"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:textColor="#000"
-                android:gravity="center_horizontal" />
-        </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/DefaultWord"
-        android:id="@+id/textViewCurrentWord"
-        android:textSize="75sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="#000"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/VLinearLayout4"
-        android:layout_above="@+id/relativeLayout"
-        android:nestedScrollingEnabled="false" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -399,43 +276,87 @@
         <Button
             style="@style/standard_button"
             android:background="@drawable/letterbutton"
-            android:text="@string/Submit"
-            android:id="@+id/buttonSubmit"
-            android:onClick="onSubmit"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:text="@string/Backspace"
+            android:id="@+id/buttonBackspace"
             android:layout_width="130dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp" />
 
-        <Button
-            style="@style/standard_button"
-            android:background="@drawable/letterbutton"
-            android:text="@string/Challenge"
-            android:id="@+id/buttonChallenge"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_width="130dp"
-            android:layout_marginBottom="15dp"
-            android:onClick="onChallenge" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Challenge"
+        android:id="@+id/textView"
+        android:textSize="70sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="#ffff050e"
+        android:nestedScrollingEnabled="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textIsSelectable="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout"
+        android:layout_above="@+id/buttonSubmit">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-
-            android:id="@+id/textViewCurrentLetter"
-            android:textSize="40sp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:text="@string/DefaultWord"
+            android:id="@+id/textViewWordStart"
+            android:textSize="45sp"
             android:textStyle="bold"
+            android:typeface="normal"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="#000"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:nestedScrollingEnabled="false"
+            android:layout_below="@+id/textView"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_gravity="center_vertical"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ending"
+            android:id="@+id/endingTextView"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            android:typeface="normal"
+            android:gravity="center_vertical|center_horizontal"
             android:textColor="#ffff050e"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="15dp"
-            android:layout_gravity="top"
-            android:textAlignment="center"
-            android:text="A" />
-    </RelativeLayout>
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:nestedScrollingEnabled="false"
+            android:layout_below="@+id/textView"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <Button
+        style="@style/standard_button"
+        android:background="@drawable/letterbutton"
+        android:text="Word Completed"
+        android:id="@+id/buttonSubmit"
+        android:onClick="onSubmit"
+        android:layout_width="250dp"
+        android:layout_above="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:textColor="#ffff050e"
+        android:layout_height="50dp" />
+
 
 </RelativeLayout>
