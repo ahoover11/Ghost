@@ -3,29 +3,44 @@ package com.hooversmithmobileinnovations.ghost;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.InputType;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 public class PlayerSelectionLocalScreenActivity extends Activity {
 
-    Button buttonLanguage, buttonStartGame;
-    ImageView imageViewPlayer1, imageViewPlayer2, imageViewPlayer3, imageViewPlayer4;
-    Drawable blueGhost, redGhost, greenGhost, orangeGhost, grayGhost, aiPlayer1, aiPlayer2, aiPlayer3, aiPlayer4;
-    EditText[] playerNames;
-    int cycleCount1, cycleCount2, cycleCount3, cycleCount4;
+    Button buttonLanguage, buttonStartGame; //Button objects
+    ImageView imageViewPlayer1, imageViewPlayer2, imageViewPlayer3, imageViewPlayer4; //ImageView objects
+    Drawable blueGhost, redGhost, greenGhost, orangeGhost, grayGhost, aiPlayer1, aiPlayer2, aiPlayer3, aiPlayer4; //Drawable objects for player types
+    EditText[] playerNamesEditText; //EditText array to store player names
+    String[] playerNames, playerTypes; //String arrays to store player names and player types
+    int[] playerNumbers; //Int array to store player numbers
+    int numberOfPlayers; //Int that reflects number of active players
+    int cycleCount1, cycleCount2, cycleCount3, cycleCount4; //Ints used to cycle through player types
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_selection_local_screen);
+
+        playerNames = new String[4];
+        playerTypes = new String[4];
+        playerNumbers = new int[4];
+        numberOfPlayers = 0;
+
+        for(int i = 0; i < 4; i++){
+            playerNames[i] = "";
+            playerTypes[i] = "";
+            playerNumbers[i] = 0;
+        }
 
         buttonLanguage = (Button)findViewById(R.id.buttonLanguage);
         buttonStartGame = (Button)findViewById(R.id.buttonStartGame);
@@ -45,39 +60,135 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
         aiPlayer3 = getResources().getDrawable(R.drawable.aigreen);
         aiPlayer4 = getResources().getDrawable(R.drawable.aiorange);
 
-        playerNames = new EditText[4];
-        playerNames[0] = (EditText)findViewById(R.id.editTextPlayer1Name);
-        playerNames[1] = (EditText)findViewById(R.id.editTextPlayer2Name);
-        playerNames[2] = (EditText)findViewById(R.id.editTextPlayer3Name);
-        playerNames[3] = (EditText)findViewById(R.id.editTextPlayer4Name);
-        playerNames[0].setVisibility(View.INVISIBLE);
-        playerNames[1].setVisibility(View.INVISIBLE);
-        playerNames[2].setVisibility(View.INVISIBLE);
-        playerNames[3].setVisibility(View.INVISIBLE);
+        playerNamesEditText = new EditText[4];
+        playerNamesEditText[0] = (EditText)findViewById(R.id.editTextPlayer1Name);
+        playerNamesEditText[1] = (EditText)findViewById(R.id.editTextPlayer2Name);
+        playerNamesEditText[2] = (EditText)findViewById(R.id.editTextPlayer3Name);
+        playerNamesEditText[3] = (EditText)findViewById(R.id.editTextPlayer4Name);
+
+        imageViewPlayer1.setImageDrawable(grayGhost);
+        playerNamesEditText[0].setText("Player 1");
+        playerNamesEditText[0].setVisibility(View.INVISIBLE);
+        imageViewPlayer2.setImageDrawable(grayGhost);
+        playerNamesEditText[1].setText("Player 2");
+        playerNamesEditText[1].setVisibility(View.INVISIBLE);
+        imageViewPlayer3.setImageDrawable(grayGhost);
+        playerNamesEditText[2].setText("Player 3");
+        playerNamesEditText[2].setVisibility(View.INVISIBLE);
+        imageViewPlayer4.setImageDrawable(grayGhost);
+        playerNamesEditText[3].setText("Player 4");
+        playerNamesEditText[3].setVisibility(View.INVISIBLE);
     }
 
     public void onButtonClickedLocalSelectionScreen(View v)
     {
         if(v == buttonLanguage){
-            //select a language
+            //Select a language
         }else if(v == buttonStartGame){
-            //go to game screen activity
-            startActivity(new Intent(this, GameScreenActivity.class));
+            //Populate variables pertaining to player information passed to next activity
+            establishPassedVariables();
+
+            //Start the game activity if more than 2 players activated
+            if(numberOfPlayers >= 2){
+                //Start the game activity and pass necessary player information
+                Intent intent = new Intent(this, GameScreenActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putStringArray("playerNames", playerNames);
+                bundle.putStringArray("playerTypes", playerTypes);
+                bundle.putIntArray("playerNumbers", playerNumbers);
+                bundle.putInt("numberOfPlayers", numberOfPlayers);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            }else{
+                //Inform the player that they need at least 2 active players to start the game
+                Toast toast = Toast.makeText(this, "You need at least 2 active players to start the game!", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+
         }
+    }
+
+    public void establishPassedVariables(){
+
+        //Clear out player information storage
+        numberOfPlayers = 0;
+        for(int i = 0; i < 4; i++){
+            playerNames[i] = "";
+            playerTypes[i] = "";
+            playerNumbers[i] = 0;
+        }
+
+        //Counter to keep track of the number of players
+        int count = 0;
+
+        //Populate values to be passed for player 1
+        if(imageViewPlayer1.getDrawable().getConstantState().equals(blueGhost.getConstantState()) || imageViewPlayer1.getDrawable().getConstantState().equals(aiPlayer1.getConstantState())){
+            playerNames[count] = playerNamesEditText[0].getText().toString();
+            playerNumbers[count] = 0;
+            if(imageViewPlayer1.getDrawable().getConstantState().equals(blueGhost.getConstantState())){
+                playerTypes[count] = "HUMAN";
+            }else{
+                playerTypes[count] = "AI";
+            }
+            count++;
+        }
+
+        //Populate values to be passed for player 2
+        if(imageViewPlayer2.getDrawable().getConstantState().equals(redGhost.getConstantState()) || imageViewPlayer2.getDrawable().getConstantState().equals(aiPlayer2.getConstantState())) {
+            playerNames[count] = playerNamesEditText[1].getText().toString();
+            playerNumbers[count] = 1;
+            if (imageViewPlayer2.getDrawable().getConstantState().equals(redGhost.getConstantState())) {
+                playerTypes[count] = "HUMAN";
+            }else {
+                playerTypes[count] = "AI";
+            }
+            count++;
+        }
+
+        //Populate values to be passed for player 3
+        if(imageViewPlayer3.getDrawable().getConstantState().equals(greenGhost.getConstantState()) || imageViewPlayer3.getDrawable().getConstantState().equals(aiPlayer3.getConstantState())) {
+            playerNames[count] = playerNamesEditText[2].getText().toString();
+            playerNumbers[count] = 2;
+            if (imageViewPlayer3.getDrawable().getConstantState().equals(greenGhost.getConstantState())) {
+                playerTypes[count] = "HUMAN";
+            }else {
+                playerTypes[count] = "AI";
+            }
+            count++;
+        }
+
+        //Populate values to be passed for player 4
+        if(imageViewPlayer4.getDrawable().getConstantState().equals(orangeGhost.getConstantState()) || imageViewPlayer4.getDrawable().getConstantState().equals(aiPlayer4.getConstantState())) {
+            playerNames[count] = playerNamesEditText[3].getText().toString();
+            playerNumbers[count] = 3;
+            if (imageViewPlayer4.getDrawable().getConstantState().equals(orangeGhost.getConstantState())) {
+                playerTypes[count] = "HUMAN";
+            }else {
+                playerTypes[count] = "AI";
+            }
+            count++;
+        }
+
+        //Set numberOfPlayers to amount of active players
+        numberOfPlayers = count;
+
     }
 
     public void cyclePlayerType(View v){
 
+        //Circulate through player types when clicking imageViews
         if(v == imageViewPlayer1){
             cycleCount1++;
             if(cycleCount1 % 3 == 0){
                 imageViewPlayer1.setImageDrawable(grayGhost);
-                playerNames[0].setText("");
-                playerNames[0].setVisibility(View.INVISIBLE);
+                //playerNamesEditText[0].setText("Player 1");
+                playerNamesEditText[0].setVisibility(View.INVISIBLE);
             }else if(cycleCount1 % 3 == 1){
                 imageViewPlayer1.setImageDrawable(blueGhost);
-                playerNames[0].setVisibility(View.VISIBLE);
-                playerNames[0].setText(R.string.Player1);
+                playerNamesEditText[0].setVisibility(View.VISIBLE);
+                //playerNamesEditText[0].setText(R.string.Player1);
             }else if(cycleCount1 % 3 == 2){
                 imageViewPlayer1.setImageDrawable(aiPlayer1);
             }
@@ -85,12 +196,12 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             cycleCount2++;
             if(cycleCount2 % 3 == 0){
                 imageViewPlayer2.setImageDrawable(grayGhost);
-                playerNames[1].setText("");
-                playerNames[1].setVisibility(View.INVISIBLE);
+                //playerNamesEditText[1].setText("Player 2");
+                playerNamesEditText[1].setVisibility(View.INVISIBLE);
             }else if(cycleCount2 % 3 == 1){
                 imageViewPlayer2.setImageDrawable(redGhost);
-                playerNames[1].setVisibility(View.VISIBLE);
-                playerNames[1].setText(R.string.Player2);
+                playerNamesEditText[1].setVisibility(View.VISIBLE);
+                //playerNamesEditText[1].setText(R.string.Player2);
             }else if(cycleCount2 % 3 == 2){
                 imageViewPlayer2.setImageDrawable(aiPlayer2);
             }
@@ -98,12 +209,12 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             cycleCount3++;
             if(cycleCount3 % 3 == 0){
                 imageViewPlayer3.setImageDrawable(grayGhost);
-                playerNames[2].setText("");
-                playerNames[2].setVisibility(View.INVISIBLE);
+                //playerNamesEditText[2].setText("Player 3");
+                playerNamesEditText[2].setVisibility(View.INVISIBLE);
             }else if(cycleCount3 % 3 == 1){
                 imageViewPlayer3.setImageDrawable(greenGhost);
-                playerNames[2].setVisibility(View.VISIBLE);
-                playerNames[2].setText(R.string.Player3);
+                playerNamesEditText[2].setVisibility(View.VISIBLE);
+                //playerNamesEditText[2].setText(R.string.Player3);
             }else if(cycleCount3 % 3 == 2){
                 imageViewPlayer3.setImageDrawable(aiPlayer3);
             }
@@ -111,12 +222,12 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             cycleCount4++;
             if(cycleCount4 % 3 == 0){
                 imageViewPlayer4.setImageDrawable(grayGhost);
-                playerNames[3].setText("");
-                playerNames[3].setVisibility(View.INVISIBLE);
+                //playerNamesEditText[3].setText("Player 4");
+                playerNamesEditText[3].setVisibility(View.INVISIBLE);
             }else if(cycleCount4 % 3 == 1){
                 imageViewPlayer4.setImageDrawable(orangeGhost);
-                playerNames[3].setVisibility(View.VISIBLE);
-                playerNames[3].setText(R.string.Player4);
+                playerNamesEditText[3].setVisibility(View.VISIBLE);
+                //playerNamesEditText[3].setText(R.string.Player4);
             }else if(cycleCount4 % 3 == 2){
                 imageViewPlayer4.setImageDrawable(aiPlayer4);
             }

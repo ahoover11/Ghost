@@ -19,7 +19,7 @@ public class ChallengeActivity extends Activity {
     boolean challengeWon;
     Vibrator myVib;
     int playerChallenged;
-    String currentWord,currentGuess;
+    String currentWord, currentGuess;
     TextView currentWordTextView, endingTextView;
     Button backspace;
     MyDBHandler dbHandler;
@@ -40,6 +40,7 @@ public class ChallengeActivity extends Activity {
         currentGuess = "";
         endingTextView.setText(currentGuess);
         myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
+
         Bundle extras = getIntent().getExtras();
         if (extras ==null)
         {
@@ -58,12 +59,10 @@ public class ChallengeActivity extends Activity {
 
     public void LetterClicked(View v)
     {
-
         myVib.vibrate(80); //haptic feedback for key press
         Resources res = getResources();
         currentGuess+= res.getResourceEntryName(v.getId());
         endingTextView.setText(currentGuess);
-
     }
 
     public void onBackspace()
@@ -73,7 +72,7 @@ public class ChallengeActivity extends Activity {
             {
                 currentGuess = "";
             }else{
-                currentGuess =currentGuess.substring(0, currentGuess.length()-1);
+                currentGuess = currentGuess.substring(0, currentGuess.length()-1);
             }
 
             endingTextView.setText(currentGuess);
@@ -107,8 +106,8 @@ public void onSubmit(View v)
         data.putExtra("isChallengeWon", isChallengeWon);
         setResult(RESULT_OK, data);
         super.finish();
-
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
