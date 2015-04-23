@@ -25,13 +25,14 @@ public class GameScreenActivity extends Activity {
 
     TextView currentLetterTextView, currentWordTextView, playerScoreTextView[], playerNameTextView[]; //TextViews objects
     Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange; //Drawable objects for player types
-    int currentPlayer, numberOfPlayers, playerTurn, previousPlayer, playerNumbers[]; //Ints to store the current player, the total number of players, the player turn, the previous player, and player numbers
+    int currentPlayer, numberOfPlayers, playerTurn, previousPlayer, playerNumbers[], playerRanks[]; //Ints to store the current player, the total number of players, the player turn, the previous player, player numbers, and player ranks
     String currentWord, currentLetter, playerScores[], playerNames[], playerTypes[]; //Strings to store the current word, current letter, player scores, player names, and player types
     boolean playersInGame[]; //Boolean array that reflects active players
     Vibrator myVib; //Vibrator object for haptic feedback
     MyDBHandler dbHandler; //Database object used for dictionary lookup
     final static int MAX_NUMBER_PLAYERS = 4; //Int that reflects the maximum possible number of players
     final static int CHALLENGE_REQUEST = 1; //Int used to signify a challenge
+    int dropOutCounter = 0; //Counter used to keep track of players as they drop out of the game
 
 
     @Override
@@ -45,6 +46,7 @@ public class GameScreenActivity extends Activity {
         currentWord = "";
         currentPlayer = 0;
         previousPlayer = -1;
+        dropOutCounter = 0;
 
         playerScoreTextView = new TextView[MAX_NUMBER_PLAYERS];
         playerScoreTextView[0] = (TextView) findViewById(R.id.textViewPlayer1Score);
@@ -85,6 +87,7 @@ public class GameScreenActivity extends Activity {
         playerNumbers = new int[MAX_NUMBER_PLAYERS];
         playerScores = new String[MAX_NUMBER_PLAYERS];
         playersInGame = new boolean[MAX_NUMBER_PLAYERS];
+        playerRanks = new int[MAX_NUMBER_PLAYERS];
 
         //Retrieve the passed in data from player selection screen
         Intent intent = getIntent();
@@ -248,9 +251,18 @@ public class GameScreenActivity extends Activity {
         }while(count<numberOfPlayers);
 
         //TODO ENDGAME ACTIVITY ACTIVATE
+        playerRanks[dropOutCounter] = playerNumbers[previousPlayer];
         Intent intent = new Intent(this, ResultsActivity.class);
-        //intent.putExtra("Winner")
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("playerNames", playerNames);
+        bundle.putStringArray("playerTypes", playerTypes);
+        bundle.putIntArray("playerNumbers", playerNumbers);
+        bundle.putStringArray("playerScores", playerScores);
+        bundle.putIntArray("playerRanks", playerRanks);
+        bundle.putInt("numberOfPlayers", numberOfPlayers);
+        intent.putExtras(bundle);
         startActivity(intent);
+        finish();
 
         return 0;
     }
@@ -274,6 +286,8 @@ public class GameScreenActivity extends Activity {
             case 4:
                 playerScores[player] += "T";
                 playersInGame[player] = false;
+                playerRanks[dropOutCounter] = playerNumbers[player];
+                dropOutCounter++;
                 break;
         }
         playerScoreTextView[player].setText(playerScores[player]);

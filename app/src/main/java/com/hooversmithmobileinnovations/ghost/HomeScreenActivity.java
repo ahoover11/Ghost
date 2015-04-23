@@ -3,7 +3,6 @@ package com.hooversmithmobileinnovations.ghost;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +13,9 @@ import android.view.View;
 public class HomeScreenActivity extends Activity {
 
     Drawable blueGhost, redGhost, greenGhost, orangeGhost;
-    Button buttonLocalGame, buttonP2PGame, buttonRules;
+    Button localGameButton, p2pGameButton, rulesButton;
     CyclicTransitionDrawable ctd;
-    ImageView ghostImage;
+    ImageView ghostImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,32 +32,33 @@ public class HomeScreenActivity extends Activity {
         greenGhost = getResources().getDrawable(R.drawable.greenghost);
         orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
 
-        buttonLocalGame = (Button)findViewById(R.id.buttonLocalGame);
-        buttonP2PGame = (Button)findViewById(R.id.buttonP2PGame);
-        buttonRules = (Button)findViewById(R.id.buttonRules);
+        localGameButton = (Button)findViewById(R.id.buttonLocalGame);
+        p2pGameButton = (Button)findViewById(R.id.buttonP2PGame);
+        rulesButton = (Button)findViewById(R.id.buttonRules);
 
         ctd = new CyclicTransitionDrawable(new Drawable[] {blueGhost,redGhost,greenGhost,orangeGhost});
 
-        ghostImage = (ImageView)findViewById(R.id.imageViewGhost);
+        ghostImageView = (ImageView)findViewById(R.id.imageViewGhost);
 
-        ghostImage.setImageDrawable(ctd);
+        ghostImageView.setImageDrawable(ctd);
 
         ctd.startTransition(1000, 1750);
     }
 
     public void onButtonClickedHomeScreen(View v)
     {
-        if(v == buttonLocalGame){
+        if(v == localGameButton){
             //go to player selection local screen activity
             startActivity(new Intent(this, PlayerSelectionLocalScreenActivity.class));
-        }else if(v == buttonP2PGame){
+        }else if(v == p2pGameButton){
             //go to player selection p2p screen activity
 
-        }else if(v == buttonRules){
+        }else if(v == rulesButton){
             //display game rules
 
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
