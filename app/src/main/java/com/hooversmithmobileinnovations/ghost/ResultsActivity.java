@@ -115,6 +115,9 @@ public class ResultsActivity extends Activity {
             }
             playerNamesTextView[count].setText(playerNames[rank]);
             playerScoresTextView[count].setText(playerScores[rank]);
+            playersImageView[count].setVisibility(View.VISIBLE);
+            playerNamesTextView[count].setVisibility(View.VISIBLE);
+            playerScoresTextView[count].setVisibility(View.VISIBLE);
             count++;
         }
     }
