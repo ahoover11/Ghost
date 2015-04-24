@@ -41,12 +41,43 @@ public class GameScreenActivity extends Activity {
         setContentView(R.layout.activity_game_screen);
 
         //Initialize some default values
-        playerTurn = 0;
-        currentLetter = "";
-        currentWord = "";
-        currentPlayer = 0;
-        previousPlayer = -1;
-        dropOutCounter = 0;
+        if(savedInstanceState == null ) //for first time
+        {
+            playerTurn = 0;
+            currentLetter = "";
+            currentWord = "";
+            currentPlayer = 0;
+            previousPlayer = -1;
+            dropOutCounter = 0;
+
+            //Initialize arrays to store player information
+            playerNames = new String[MAX_NUMBER_PLAYERS];
+            playerTypes = new String[MAX_NUMBER_PLAYERS];
+            playerNumbers = new int[MAX_NUMBER_PLAYERS];
+            playerScores = new String[MAX_NUMBER_PLAYERS];
+            playersInGame = new boolean[MAX_NUMBER_PLAYERS];
+            playerRanks = new int[MAX_NUMBER_PLAYERS];
+
+            //Retrieve the passed in data from player selection screen
+            Intent intent = getIntent();
+            if(intent != null) {
+                Bundle bundle = intent.getExtras();
+                playerNames = bundle.getStringArray("playerNames");
+                playerTypes = bundle.getStringArray("playerTypes");
+                playerNumbers = bundle.getIntArray("playerNumbers");
+                numberOfPlayers = bundle.getInt("numberOfPlayers");
+                //Populate the playersInGame array to reflect the active players
+                for(int i = 0; i < numberOfPlayers; i++){
+                    playersInGame[i] = true;
+                }
+
+                //Populate the playerScores array to reflect starting score (ie no letters of GHOST)
+                for (int i = 0; i < MAX_NUMBER_PLAYERS; i++)
+                {
+                    playerScores[i] = "";
+                }
+            }
+        }
 
         playerScoreTextView = new TextView[MAX_NUMBER_PLAYERS];
         playerScoreTextView[0] = (TextView) findViewById(R.id.textViewPlayer1Score);
@@ -62,8 +93,10 @@ public class GameScreenActivity extends Activity {
 
         currentLetterTextView = (TextView) findViewById(R.id.textViewCurrentLetter);
         currentWordTextView = (TextView) findViewById(R.id.textViewCurrentWord);
+
         currentLetterTextView.setText(currentLetter);
         currentWordTextView.setText(currentWord);
+
 
         blueGhost = getResources().getDrawable(R.drawable.blueghost);
         redGhost = getResources().getDrawable(R.drawable.redghost);
@@ -81,37 +114,7 @@ public class GameScreenActivity extends Activity {
 
         //List<String> list = dbHandler.getSuggestions("zip");//For suggestions
 
-        //Initialize arrays to store player information
-        playerNames = new String[MAX_NUMBER_PLAYERS];
-        playerTypes = new String[MAX_NUMBER_PLAYERS];
-        playerNumbers = new int[MAX_NUMBER_PLAYERS];
-        playerScores = new String[MAX_NUMBER_PLAYERS];
-        playersInGame = new boolean[MAX_NUMBER_PLAYERS];
-        playerRanks = new int[MAX_NUMBER_PLAYERS];
-
-        //Retrieve the passed in data from player selection screen
-        Intent intent = getIntent();
-        if(intent != null) {
-            Bundle bundle = intent.getExtras();
-            playerNames = bundle.getStringArray("playerNames");
-            playerTypes = bundle.getStringArray("playerTypes");
-            playerNumbers = bundle.getIntArray("playerNumbers");
-            numberOfPlayers = bundle.getInt("numberOfPlayers");
-        }
-
-        //Populate the playersInGame array to reflect the active players
-        for(int i = 0; i < numberOfPlayers; i++){
-            playersInGame[i] = true;
-        }
-
-        //Populate the playerScores array to reflect starting score (ie no letters of GHOST)
-        for (int i = 0; i < MAX_NUMBER_PLAYERS; i++)
-        {
-            playerScores[i] = "";
-        }
-
-        //Update textViews to current player scores
-        for(int i = 0; i < MAX_NUMBER_PLAYERS; i++)
+        for(int i = 0; i < MAX_NUMBER_PLAYERS; i++)   //Update textViews to current player scores
         {
             playerScoreTextView[i].setText(playerScores[i]);
             playerNameTextView[i].setText(playerNames[i]);
@@ -150,14 +153,20 @@ public class GameScreenActivity extends Activity {
                 if (validWord(currentWord.toLowerCase()))
                 {
                     //Update variables to prepare for next round
-                    addLetter(currentPlayer);
-                    currentWord = "";
+                    boolean gameNotOver = addLetter(currentPlayer);
+                    if (gameNotOver)
+                    {
                     previousPlayer = -1;
+                    currentWord = "";
                     currentWordTextView.setText(currentWord);
                     currentPlayer = nextPlayer(playerTurn);
                     playerTurn++;
-                    playerTurn(currentPlayer);
-                    Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
+                        playerTurn(currentPlayer);
+                        Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
+                    }else
+                    {
+                        endGame();//End the game and go to results screen
+                    }
                 } else {
                     //Update fields to prepare for next player's turn
                     previousPlayer = currentPlayer;
@@ -187,87 +196,97 @@ public class GameScreenActivity extends Activity {
 
 
         // Dialog
-        final Dialog dialog = new Dialog(GameScreenActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.next_turn_popup);
+        //todo
+            final Dialog dialog = new Dialog(GameScreenActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.next_turn_popup);
 
-        TextView text = (TextView)dialog.findViewById(R.id.popupPlayerTextView);
-        text.setText(playerNames[player]);
-        ImageView image = (ImageView)dialog.findViewById(R.id.imageViewGhost);
-        switch (playerNumbers[player]){
-            case 0 :
-                if(playerTypes[player].equals("HUMAN")){
-                    image.setImageDrawable(blueGhost);
-                }else{
-                    image.setImageDrawable(aiBlue);
-                }
-                break;
-            case 1:
-                if(playerTypes[player].equals("HUMAN")){
-                    image.setImageDrawable(redGhost);
-                }else{
-                    image.setImageDrawable(aiRed);
-                }
-                break;
-            case 2:
-                if(playerTypes[player].equals("HUMAN")){
-                    image.setImageDrawable(greenGhost);
-                }else{
-                    image.setImageDrawable(aiGreen);
-                }
-                break;
-            case 3:
-                if(playerTypes[player].equals("HUMAN")){
-                    image.setImageDrawable(orangeGhost);
-                }else{
-                    image.setImageDrawable(aiOrange);
-                }
-                break;
-        }
-
-        //If button is clicked, close the custom dialog
-        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
-        dialogButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            TextView text = (TextView) dialog.findViewById(R.id.popupPlayerTextView);
+            text.setText(playerNames[player]);
+            ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+            switch (playerNumbers[player]) {
+                case 0:
+                    if (playerTypes[player].equals("HUMAN")) {
+                        image.setImageDrawable(blueGhost);
+                    } else {
+                        image.setImageDrawable(aiBlue);
+                    }
+                    break;
+                case 1:
+                    if (playerTypes[player].equals("HUMAN")) {
+                        image.setImageDrawable(redGhost);
+                    } else {
+                        image.setImageDrawable(aiRed);
+                    }
+                    break;
+                case 2:
+                    if (playerTypes[player].equals("HUMAN")) {
+                        image.setImageDrawable(greenGhost);
+                    } else {
+                        image.setImageDrawable(aiGreen);
+                    }
+                    break;
+                case 3:
+                    if (playerTypes[player].equals("HUMAN")) {
+                        image.setImageDrawable(orangeGhost);
+                    } else {
+                        image.setImageDrawable(aiOrange);
+                    }
+                    break;
             }
-        });
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false); //disable back button out
-        dialog.show();
+
+            //If button is clicked, close the custom dialog
+            Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+            dialogButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false); //disable back button out
+
+            dialog.show();
 
     }
 
-    private int nextPlayer(int previousPlayer)
+    private int nextPlayer(int lastPlayer)
     {
         int count = 1;
         do{
-            if (playersInGame[(previousPlayer+count) % numberOfPlayers])
+            if (playersInGame[(lastPlayer+count) % numberOfPlayers])
             {
-                return (previousPlayer+count) % numberOfPlayers;
+                return (lastPlayer+count) % numberOfPlayers;
             }
             count++;
         }while(count<numberOfPlayers);
 
-        //TODO ENDGAME ACTIVITY ACTIVATE
-        playerRanks[dropOutCounter] = playerNumbers[previousPlayer];
+        return -1;
+    }
+
+    public void endGame()
+    {
+        Toast.makeText(getBaseContext(), "Game Ended", Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            if( playersInGame[i])
+                playerRanks[dropOutCounter] = playerNumbers[i];
+        }
         Intent intent = new Intent(this, ResultsActivity.class);
         Bundle bundle = new Bundle();
+
         bundle.putStringArray("playerNames", playerNames);
         bundle.putStringArray("playerTypes", playerTypes);
         bundle.putIntArray("playerNumbers", playerNumbers);
         bundle.putStringArray("playerScores", playerScores);
+
         bundle.putIntArray("playerRanks", playerRanks);
         bundle.putInt("numberOfPlayers", numberOfPlayers);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
-
-        return 0;
     }
 
-    private void addLetter(int player)
+    private boolean addLetter(int player)
     {
         switch (playerScores[player].length())
         {
@@ -285,12 +304,16 @@ public class GameScreenActivity extends Activity {
                 break;
             case 4:
                 playerScores[player] += "T";
+                playerScoreTextView[player].setText(playerScores[player]);
                 playersInGame[player] = false;
                 playerRanks[dropOutCounter] = playerNumbers[player];
                 dropOutCounter++;
+                if (dropOutCounter == numberOfPlayers-1)
+                    return false;
                 break;
         }
         playerScoreTextView[player].setText(playerScores[player]);
+        return true;
     }
 
     private boolean validWord(String word)
@@ -323,18 +346,25 @@ public class GameScreenActivity extends Activity {
     {
         if(requestCode== CHALLENGE_REQUEST && resultCode == RESULT_OK)
         {
+            boolean gameNotOver;
             if (data.getExtras().getBoolean("isChallengeWon"))
             {
-                addLetter(currentPlayer); //add a letter to the player who challenged
+                gameNotOver = addLetter(currentPlayer); //add a letter to the player who challenged
             }else{
-                addLetter(previousPlayer); //add a letter for failed challenge
+               gameNotOver = addLetter(previousPlayer); //add a letter for failed challenge
             }
-            currentWord = "";
-            previousPlayer = -1;
-            currentWordTextView.setText(currentWord);
-            currentPlayer = nextPlayer(playerTurn);
-            playerTurn++;
-            playerTurn(currentPlayer);
+            if (gameNotOver) {
+                currentWord = "";
+                previousPlayer = -1;
+                currentWordTextView.setText(currentWord);
+                currentPlayer = nextPlayer(playerTurn);
+                playerTurn++;
+                playerTurn(currentPlayer);
+            }
+            else
+            {
+                endGame();
+            }
         }
     }
 
@@ -358,5 +388,52 @@ public class GameScreenActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("playerTurn", playerTurn);
+        outState.putString("currentLetter", currentLetter);
+        outState.putString("currentWord", currentWord);
+        outState.putInt("currentPlayer", currentPlayer);
+        outState.putInt("previousPlayer", previousPlayer);
+        outState.putInt("dropOutCounter", dropOutCounter);
+
+        outState.putStringArray("playerNames", playerNames);
+        outState.putStringArray("playerTypes", playerTypes);
+        outState.putInt("numberOfPlayers", numberOfPlayers);
+        outState.putBooleanArray("playersInGame", playersInGame);
+        outState.putStringArray("playerScores", playerScores);
+        outState.putIntArray("playerNumbers", playerNumbers);
+
+}
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        playerTurn = savedInstanceState.getInt("playerTurn");
+        currentLetter = savedInstanceState.getString("currentLetter");
+        currentWord = savedInstanceState.getString("currentWord");
+        currentPlayer = savedInstanceState.getInt("currentPlayer");
+        previousPlayer = savedInstanceState.getInt("previousPlayer");
+        dropOutCounter = savedInstanceState.getInt("dropOutCounter");
+
+        //Initialize arrays to store player information
+       playerNames = new String[MAX_NUMBER_PLAYERS];
+        playerTypes = new String[MAX_NUMBER_PLAYERS];
+        playerNumbers = new int[MAX_NUMBER_PLAYERS];
+       playerScores = new String[MAX_NUMBER_PLAYERS];
+       playersInGame = new boolean[MAX_NUMBER_PLAYERS];
+       playerRanks = new int[MAX_NUMBER_PLAYERS];
+
+            playerNames = savedInstanceState.getStringArray("playerNames");
+            playerTypes = savedInstanceState.getStringArray("playerTypes");
+            playerNumbers = savedInstanceState.getIntArray("playerNumbers");
+            numberOfPlayers = savedInstanceState.getInt("numberOfPlayers");
+
+            playersInGame = savedInstanceState.getBooleanArray("playersInGame");
+            playerScores = savedInstanceState.getStringArray("playerScores");
+
     }
 }

@@ -90,7 +90,7 @@ public class ResultsActivity extends Activity {
 
     public void populateFields(){
         int count = 0;
-        for(int i = playerRanks.length - 1; i <= 0; i--){
+        for(int i = numberOfPlayers - 1; i >= 0; i--){
             int rank = playerRanks[i];
             if(playerTypes[rank].equals("HUMAN")){
                 if(playerNumbers[rank] == 1){
