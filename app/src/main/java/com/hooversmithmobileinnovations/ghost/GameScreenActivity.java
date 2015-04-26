@@ -71,12 +71,33 @@ public class GameScreenActivity extends Activity {
                     playersInGame[i] = true;
                 }
 
+
                 //Populate the playerScores array to reflect starting score (ie no letters of GHOST)
                 for (int i = 0; i < MAX_NUMBER_PLAYERS; i++)
                 {
                     playerScores[i] = "";
                 }
             }
+        }else //Restore state
+        {
+            playerTurn = savedInstanceState.getInt("playerTurn");
+            currentLetter = savedInstanceState.getString("currentLetter");
+            currentWord = savedInstanceState.getString("currentWord");
+            currentPlayer = savedInstanceState.getInt("currentPlayer");
+            previousPlayer = savedInstanceState.getInt("previousPlayer");
+            dropOutCounter = savedInstanceState.getInt("dropOutCounter");
+
+            playerNames = savedInstanceState.getStringArray("playerNames");
+            playerTypes = savedInstanceState.getStringArray("playerTypes");
+            playerNumbers = savedInstanceState.getIntArray("playerNumbers");
+            numberOfPlayers = savedInstanceState.getInt("numberOfPlayers");
+
+            playersInGame = savedInstanceState.getBooleanArray("playersInGame");
+            playerScores = savedInstanceState.getStringArray("playerScores");
+
+            playersInGame = savedInstanceState.getBooleanArray("playersInGame");
+            playerRanks= savedInstanceState.getIntArray("playerRanks");
+
         }
 
         playerScoreTextView = new TextView[MAX_NUMBER_PLAYERS];
@@ -268,7 +289,7 @@ public class GameScreenActivity extends Activity {
     {
         Toast.makeText(getBaseContext(), "Game Ended", Toast.LENGTH_SHORT).show();
         for (int i = 0; i < numberOfPlayers; i++) {
-            if( playersInGame[i])
+            if(playersInGame[i])
                 playerRanks[dropOutCounter] = playerNumbers[i];
         }
         Intent intent = new Intent(this, ResultsActivity.class);
@@ -391,7 +412,7 @@ public class GameScreenActivity extends Activity {
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+
 
         outState.putInt("playerTurn", playerTurn);
         outState.putString("currentLetter", currentLetter);
@@ -407,12 +428,15 @@ public class GameScreenActivity extends Activity {
         outState.putStringArray("playerScores", playerScores);
         outState.putIntArray("playerNumbers", playerNumbers);
 
+        outState.putIntArray("playerRanks", playerRanks);
+        outState.putBooleanArray("playersInGame",playersInGame);
+        super.onSaveInstanceState(outState);
 }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        playerTurn = savedInstanceState.getInt("playerTurn");
+    /*    playerTurn = savedInstanceState.getInt("playerTurn");
         currentLetter = savedInstanceState.getString("currentLetter");
         currentWord = savedInstanceState.getString("currentWord");
         currentPlayer = savedInstanceState.getInt("currentPlayer");
@@ -420,7 +444,7 @@ public class GameScreenActivity extends Activity {
         dropOutCounter = savedInstanceState.getInt("dropOutCounter");
 
         //Initialize arrays to store player information
-       playerNames = new String[MAX_NUMBER_PLAYERS];
+      playerNames = new String[MAX_NUMBER_PLAYERS];
         playerTypes = new String[MAX_NUMBER_PLAYERS];
         playerNumbers = new int[MAX_NUMBER_PLAYERS];
        playerScores = new String[MAX_NUMBER_PLAYERS];
@@ -433,7 +457,7 @@ public class GameScreenActivity extends Activity {
             numberOfPlayers = savedInstanceState.getInt("numberOfPlayers");
 
             playersInGame = savedInstanceState.getBooleanArray("playersInGame");
-            playerScores = savedInstanceState.getStringArray("playerScores");
+            playerScores = savedInstanceState.getStringArray("playerScores");*/
 
     }
 }

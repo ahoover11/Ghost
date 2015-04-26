@@ -93,23 +93,23 @@ public class ResultsActivity extends Activity {
         for(int i = numberOfPlayers - 1; i >= 0; i--){
             int rank = playerRanks[i];
             if(playerTypes[rank].equals("HUMAN")){
-                if(playerNumbers[rank] == 1){
+                if(playerNumbers[rank] == 0){
                     playersImageView[count].setImageDrawable(blueGhost);
-                }else if(playerNumbers[rank] == 2){
+                }else if(playerNumbers[rank] == 1){
                     playersImageView[count].setImageDrawable(redGhost);
-                }else if(playerNumbers[rank] == 3){
+                }else if(playerNumbers[rank] == 2){
                     playersImageView[count].setImageDrawable(greenGhost);
-                }else if(playerNumbers[rank] == 4){
+                }else if(playerNumbers[rank] == 3){
                     playersImageView[count].setImageDrawable(orangeGhost);
                 }
             }else if(playerTypes[rank].equals("AI")){
-                if(playerNumbers[rank] == 1){
+                if(playerNumbers[rank] == 0){
                     playersImageView[count].setImageDrawable(aiBlue);
-                }else if(playerNumbers[rank] == 2){
+                }else if(playerNumbers[rank] == 1){
                     playersImageView[count].setImageDrawable(aiRed);
-                }else if(playerNumbers[rank] == 3){
+                }else if(playerNumbers[rank] == 2){
                     playersImageView[count].setImageDrawable(aiGreen);
-                }else if(playerNumbers[rank] == 4){
+                }else if(playerNumbers[rank] == 3){
                     playersImageView[count].setImageDrawable(aiOrange);
                 }
             }
