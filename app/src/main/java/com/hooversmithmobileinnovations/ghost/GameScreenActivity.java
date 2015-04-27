@@ -20,6 +20,8 @@ import android.os.Vibrator;
 import android.widget.Button;
 import android.view.Window;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -135,7 +137,7 @@ public class GameScreenActivity extends Activity {
 
         myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
-       // List<String> list = dbHandler.getSuggestions("zip");//For suggestions
+
 
         for(int i = 0; i < MAX_NUMBER_PLAYERS; i++)   //Update textViews to current player scores
         {
@@ -259,11 +261,17 @@ public class GameScreenActivity extends Activity {
             }
 
             //If button is clicked, close the custom dialog
+        final int aiPlayer = player;
+
             Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
             dialogButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
+                    if (playerTypes[aiPlayer].equals("AI"))
+                    {
+                        aiTurn(aiPlayer);
+                    }
                 }
             });
             dialog.setCancelable(false);
@@ -272,6 +280,44 @@ public class GameScreenActivity extends Activity {
             dialog.show();
 
 
+    }
+
+    public void aiTurn(int player)
+    {
+
+                if (currentWord.length()==0)
+                {
+                    currentLetter = "A";
+                    onSubmit(currentLetterTextView);
+                }else {
+
+                    List<String> list = dbHandler.getSuggestions(currentWord);//For suggestions
+                    if (list.size() == 0) {
+                        onChallenge(currentLetterTextView);
+                    } else {
+                        List<String> smartList = new ArrayList<String>();
+                        List<String> stupidList = new ArrayList<String>();
+
+                        for (int i = 0; i < list.size(); i++) {
+                            int aiPosition = currentWord.length() % (dropOutCounter + 1);
+                            if (list.get(i).length() % (dropOutCounter + 1) - 1 == aiPosition) {
+                                stupidList.add(list.get(i));
+                            } else {
+                                smartList.add(list.get(i));
+                            }
+                        }
+
+                        Collections.shuffle(smartList);
+                        Collections.shuffle(stupidList);
+
+
+                        //TODO Random choice between smart stupid
+                        Toast.makeText(getBaseContext(), smartList.get(0), Toast.LENGTH_SHORT).show();
+                        char guess = smartList.get(0).toCharArray()[currentWord.length()];
+                        currentLetter = ("" + guess).toUpperCase();
+                        onSubmit(currentLetterTextView);
+                    }
+                }
     }
 
     private int nextPlayer(int lastPlayer)
