@@ -23,6 +23,7 @@ import android.view.Window;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 
 public class GameScreenActivity extends Activity {
@@ -287,7 +288,8 @@ public class GameScreenActivity extends Activity {
 
                 if (currentWord.length()==0)
                 {
-                    currentLetter = "A";
+                    Random r = new Random();
+                    currentLetter = ""+(char) (r.nextInt(26) + 'A');
                     onSubmit(currentLetterTextView);
                 }else {
 

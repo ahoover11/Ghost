@@ -348,15 +348,15 @@
     <Button
         style="@style/standard_button"
         android:background="@drawable/letterbutton"
-        android:text="Word Completed"
+        android:text="\@string/Submit"
         android:id="@+id/buttonSubmit"
         android:onClick="onSubmit"
-        android:layout_width="250dp"
+        android:layout_width="130dp"
         android:layout_above="@+id/relativeLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:textColor="#ffff050e"
-        android:layout_height="50dp" />
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

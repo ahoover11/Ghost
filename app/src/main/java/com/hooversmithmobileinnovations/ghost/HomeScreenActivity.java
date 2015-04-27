@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.view.View;
 
+import java.util.Random;
+
 public class HomeScreenActivity extends Activity {
 
     Drawable blueGhost, redGhost, greenGhost, orangeGhost;
@@ -21,6 +23,7 @@ public class HomeScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
         /////////////////////////////////////////////////////////////////////
         //Load Database for first run
         MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
@@ -33,7 +36,7 @@ public class HomeScreenActivity extends Activity {
         orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
 
         localGameButton = (Button)findViewById(R.id.buttonLocalGame);
-        p2pGameButton = (Button)findViewById(R.id.buttonP2PGame);
+       // p2pGameButton = (Button)findViewById(R.id.buttonP2PGame);
         rulesButton = (Button)findViewById(R.id.buttonRules);
 
         ctd = new CyclicTransitionDrawable(new Drawable[] {blueGhost,redGhost,greenGhost,orangeGhost});

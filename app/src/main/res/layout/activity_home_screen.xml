@@ -17,23 +17,12 @@
         <Button
             style="@style/standard_button2"
             android:background="@drawable/letterbutton"
-            android:text="@string/LocalGame"
+            android:text="@string/NewGame"
             android:id="@+id/buttonLocalGame"
             android:layout_gravity="center_horizontal"
             android:textColor="#000"
             android:layout_width="150dp"
-            android:layout_above="@+id/VLinearLayout1"
             android:layout_centerHorizontal="true"
-            android:onClick="onButtonClickedHomeScreen" />
-
-        <Button
-            style="@style/standard_button2"
-            android:text="@string/P2PGame"
-            android:id="@+id/buttonP2PGame"
-            android:layout_gravity="center_horizontal"
-            android:textColor="#000"
-            android:layout_width="150dp"
-            android:background="@drawable/letterbutton"
             android:onClick="onButtonClickedHomeScreen" />
 
         <Button
