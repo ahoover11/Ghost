@@ -89,36 +89,36 @@ public class ResultsActivity extends Activity {
     }
 
     public void populateFields(){
-        int count = 0;
-        for(int i = numberOfPlayers - 1; i >= 0; i--){
+
+        for(int i = 0; i <numberOfPlayers; i++){
             int rank = playerRanks[i];
-            if(playerTypes[rank].equals("HUMAN")){
-                if(playerNumbers[rank] == 0){
-                    playersImageView[count].setImageDrawable(blueGhost);
-                }else if(playerNumbers[rank] == 1){
-                    playersImageView[count].setImageDrawable(redGhost);
-                }else if(playerNumbers[rank] == 2){
-                    playersImageView[count].setImageDrawable(greenGhost);
-                }else if(playerNumbers[rank] == 3){
-                    playersImageView[count].setImageDrawable(orangeGhost);
+            if(playerTypes[i].equals("HUMAN")){
+                if(playerNumbers[i] == 0){
+                    playersImageView[rank].setImageDrawable(blueGhost);
+                }else if(playerNumbers[i] == 1){
+                    playersImageView[rank].setImageDrawable(redGhost);
+                }else if(playerNumbers[i] == 2){
+                    playersImageView[rank].setImageDrawable(greenGhost);
+                }else if(playerNumbers[i] == 3){
+                    playersImageView[rank].setImageDrawable(orangeGhost);
                 }
-            }else if(playerTypes[rank].equals("AI")){
-                if(playerNumbers[rank] == 0){
-                    playersImageView[count].setImageDrawable(aiBlue);
-                }else if(playerNumbers[rank] == 1){
-                    playersImageView[count].setImageDrawable(aiRed);
-                }else if(playerNumbers[rank] == 2){
-                    playersImageView[count].setImageDrawable(aiGreen);
-                }else if(playerNumbers[rank] == 3){
-                    playersImageView[count].setImageDrawable(aiOrange);
+            }else if(playerTypes[i].equals("AI")){
+                if(playerNumbers[i] == 0){
+                    playersImageView[rank].setImageDrawable(aiBlue);
+                }else if(playerNumbers[i] == 1){
+                    playersImageView[rank].setImageDrawable(aiRed);
+                }else if(playerNumbers[i] == 2){
+                    playersImageView[rank].setImageDrawable(aiGreen);
+                }else if(playerNumbers[i] == 3){
+                    playersImageView[rank].setImageDrawable(aiOrange);
                 }
             }
-            playerNamesTextView[count].setText(playerNames[rank]);
-            playerScoresTextView[count].setText(playerScores[rank]);
-            playersImageView[count].setVisibility(View.VISIBLE);
-            playerNamesTextView[count].setVisibility(View.VISIBLE);
-            playerScoresTextView[count].setVisibility(View.VISIBLE);
-            count++;
+            playerNamesTextView[rank].setText(playerNames[i]);
+            playerScoresTextView[rank].setText(playerScores[i]);
+            playersImageView[rank].setVisibility(View.VISIBLE);
+            playerNamesTextView[rank].setVisibility(View.VISIBLE);
+            playerScoresTextView[rank].setVisibility(View.VISIBLE);
+
         }
     }
 

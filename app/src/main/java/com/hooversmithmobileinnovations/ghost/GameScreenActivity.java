@@ -20,6 +20,8 @@ import android.os.Vibrator;
 import android.widget.Button;
 import android.view.Window;
 
+import java.util.List;
+
 
 public class GameScreenActivity extends Activity {
 
@@ -48,7 +50,7 @@ public class GameScreenActivity extends Activity {
             currentWord = "";
             currentPlayer = 0;
             previousPlayer = -1;
-            dropOutCounter = 0;
+
 
             //Initialize arrays to store player information
             playerNames = new String[MAX_NUMBER_PLAYERS];
@@ -71,7 +73,7 @@ public class GameScreenActivity extends Activity {
                     playersInGame[i] = true;
                 }
 
-
+                dropOutCounter = numberOfPlayers-1;
                 //Populate the playerScores array to reflect starting score (ie no letters of GHOST)
                 for (int i = 0; i < MAX_NUMBER_PLAYERS; i++)
                 {
@@ -133,7 +135,7 @@ public class GameScreenActivity extends Activity {
 
         myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
-        //List<String> list = dbHandler.getSuggestions("zip");//For suggestions
+       // List<String> list = dbHandler.getSuggestions("zip");//For suggestions
 
         for(int i = 0; i < MAX_NUMBER_PLAYERS; i++)   //Update textViews to current player scores
         {
@@ -208,6 +210,7 @@ public class GameScreenActivity extends Activity {
 
     public void playerTurn(int player)
     {
+
         //Set all player names to black if it is not their turn
         for (int i = 0; i < numberOfPlayers; i++)
         {
@@ -217,7 +220,6 @@ public class GameScreenActivity extends Activity {
 
 
         // Dialog
-        //todo
             final Dialog dialog = new Dialog(GameScreenActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.next_turn_popup);
@@ -269,6 +271,7 @@ public class GameScreenActivity extends Activity {
 
             dialog.show();
 
+
     }
 
     private int nextPlayer(int lastPlayer)
@@ -290,7 +293,7 @@ public class GameScreenActivity extends Activity {
         Toast.makeText(getBaseContext(), "Game Ended", Toast.LENGTH_SHORT).show();
         for (int i = 0; i < numberOfPlayers; i++) {
             if(playersInGame[i])
-                playerRanks[dropOutCounter] = playerNumbers[i];
+                playerRanks[i] = dropOutCounter;
         }
         Intent intent = new Intent(this, ResultsActivity.class);
         Bundle bundle = new Bundle();
@@ -327,9 +330,9 @@ public class GameScreenActivity extends Activity {
                 playerScores[player] += "T";
                 playerScoreTextView[player].setText(playerScores[player]);
                 playersInGame[player] = false;
-                playerRanks[dropOutCounter] = playerNumbers[player];
-                dropOutCounter++;
-                if (dropOutCounter == numberOfPlayers-1)
+                playerRanks[player] = dropOutCounter;
+                dropOutCounter--;
+                if (dropOutCounter == 0)
                     return false;
                 break;
         }
