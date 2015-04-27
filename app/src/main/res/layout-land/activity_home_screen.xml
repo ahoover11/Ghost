@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".HomeScreenActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/GHOST"
+        android:id="@+id/textViewGhost"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="60sp"
+        android:layout_marginTop="10dp" />
+
+    <ImageView
+        android:layout_width="92dp"
+        android:layout_height="95dp"
+        android:id="@+id/imageViewGhost"
+        android:src="@drawable/blueghost"
+        android:longClickable="false"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/textViewGhost"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:weightSum="1"
+        android:layout_below="@+id/imageViewGhost">
+
+        <Button
+            style="@style/standard_button2"
+            android:background="@drawable/letterbutton"
+            android:text="@string/NewGame"
+            android:id="@+id/buttonLocalGame"
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:onClick="onButtonClickedHomeScreen"
+            android:layout_alignBottom="@+id/textViewGhost"
+            android:layout_alignLeft="@+id/buttonRules"
+            android:layout_alignStart="@+id/buttonRules"
+            android:layout_marginLeft="63dp"
+            android:layout_marginStart="63dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="@style/standard_button2"
+            android:background="@drawable/letterbutton"
+            android:text="@string/Rules"
+            android:id="@+id/buttonRules"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:onClick="onButtonClickedHomeScreen"
+            android:layout_alignBottom="@+id/textViewGhost"
+            android:layout_alignLeft="@+id/textViewGhost"
+            android:layout_alignStart="@+id/textViewGhost"
+            android:layout_marginLeft="94dp"
+            android:layout_marginStart="94dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.18" />
+    </LinearLayout>
+
+</RelativeLayout>
