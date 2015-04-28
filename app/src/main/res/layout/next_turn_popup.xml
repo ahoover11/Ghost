@@ -28,7 +28,7 @@
         android:contentDescription="Ghost Image"/>
 
     <Button
-        style="@style/standard_button"
+        style="@style/standard_button_popup"
         android:background="@drawable/letterbutton"
         android:text="@string/StartTurn"
         android:id="@+id/popupButton"

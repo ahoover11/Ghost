@@ -164,7 +164,7 @@
         android:id="@+id/buttonNewGame"
         android:layout_marginTop="23dp"
         android:background="@drawable/letterbutton"
-        style="@style/standard_button3"
+        style="@style/standard_button_resultsscreen_landscape"
         android:layout_below="@+id/linearLayout3"
         android:layout_alignLeft="@+id/buttonHomeScreen"
         android:layout_alignStart="@+id/buttonHomeScreen"
@@ -180,7 +180,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="34dp"
-        style="@style/standard_button3"
+        style="@style/standard_button_resultsscreen_landscape"
         android:background="@drawable/letterbutton"
         android:onClick="onButtonClickedResultsScreen" />
 
