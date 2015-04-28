@@ -16,8 +16,8 @@
         android:id="@+id/HLinearLayout1">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/imageViewBlueGhost"
             android:src="@drawable/grayghost"
             android:layout_marginTop="10dp"
@@ -38,7 +38,7 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/HLinearLayout1"
         android:layout_alignParentLeft="true"
@@ -46,8 +46,8 @@
         android:id="@+id/HLinearLayout2">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/imageViewRedGhost"
             android:src="@drawable/grayghost"
             android:layout_marginTop="10dp"
@@ -76,8 +76,8 @@
         android:id="@+id/HLinearLayout3">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/imageViewGreenGhost"
             android:src="@drawable/grayghost"
             android:layout_marginTop="10dp"
@@ -106,8 +106,8 @@
         android:id="@+id/HLinearLayout4">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/imageViewOrangeGhost"
             android:src="@drawable/grayghost"
             android:layout_marginTop="10dp"
@@ -127,36 +127,33 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/VLinearLayout4"
         android:layout_below="@+id/HLinearLayout4">
 
         <Button
-            style="@style/standard_button_playerselectionscreen_portrait"
+            style="@style/standard_button_playerselectionscreen_landscape"
             android:background="@drawable/letterbutton"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Language"
-            android:id="@+id/buttonLanguage"
-            android:layout_gravity="bottom|center"
-            android:layout_marginTop="70dp"
+            android:id="@+id/button"
             android:onClick="onButtonClickedLocalSelectionScreen"
-            android:textColor="#ffffff" />
+            android:layout_weight="0.5" />
 
         <Button
-            style="@style/standard_button_playerselectionscreen_portrait"
+            style="@style/standard_button_playerselectionscreen_landscape"
             android:background="@drawable/letterbutton"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/StartGame"
-            android:id="@+id/buttonStartGame"
-            android:layout_gravity="center"
+            android:id="@+id/button2"
             android:layout_marginTop="40dp"
             android:onClick="onButtonClickedLocalSelectionScreen"
-            android:textColor="#ffffff" />
+            android:layout_weight="0.5" />
     </LinearLayout>
 
 </RelativeLayout>

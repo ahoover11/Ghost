@@ -35,7 +35,7 @@ public class HomeScreenActivity extends Activity {
         greenGhost = getResources().getDrawable(R.drawable.greenghost);
         orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
 
-        localGameButton = (Button)findViewById(R.id.buttonLocalGame);
+        localGameButton = (Button)findViewById(R.id.buttonNewGame);
        // p2pGameButton = (Button)findViewById(R.id.buttonP2PGame);
         rulesButton = (Button)findViewById(R.id.buttonRules);
 
