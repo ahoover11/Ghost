@@ -348,7 +348,7 @@
     <Button
         style="@style/standard_button"
         android:background="@drawable/letterbutton"
-        android:text="\@string/Submit"
+        android:text="@string/Submit"
         android:id="@+id/buttonSubmit"
         android:onClick="onSubmit"
         android:layout_width="130dp"
