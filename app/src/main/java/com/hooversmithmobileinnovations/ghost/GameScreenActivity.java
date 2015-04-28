@@ -285,7 +285,6 @@ public class GameScreenActivity extends Activity {
 
     public void aiTurn(int player)
     {
-
                 if (currentWord.length()==0)
                 {
                     Random r = new Random();
@@ -314,8 +313,16 @@ public class GameScreenActivity extends Activity {
 
 
                         //TODO Random choice between smart stupid
-                        Toast.makeText(getBaseContext(), smartList.get(0), Toast.LENGTH_SHORT).show();
-                        char guess = smartList.get(0).toCharArray()[currentWord.length()];
+                        //Toast.makeText(getBaseContext(), smartList.get(0), Toast.LENGTH_SHORT).show();
+                        char guess;
+                        if (smartList.size()>0&&smartList.get(0).length() >currentWord.length() ) {
+                            guess = smartList.get(0).toCharArray()[currentWord.length()];
+                        }
+                        else
+                        {
+                            Random r = new Random();
+                            guess = (char) (r.nextInt(26) + 'A');
+                        }
                         currentLetter = ("" + guess).toUpperCase();
                         onSubmit(currentLetterTextView);
                     }
@@ -403,8 +410,32 @@ public class GameScreenActivity extends Activity {
 
             intent.putExtra("player", playerBeingChallenged);
             intent.putExtra("currentWord", currentWord);
-
-            startActivityForResult(intent, CHALLENGE_REQUEST);
+            if (playerTypes[previousPlayer].equals("HUMAN")) {
+                startActivityForResult(intent, CHALLENGE_REQUEST);
+            }else
+            {
+                List<String> list = dbHandler.getSuggestions(currentWord);
+                boolean gameNotOver;
+                if(list.size()==0)//todo chance bad guess
+                {
+                    gameNotOver = addLetter(previousPlayer);
+                }else
+                {
+                    gameNotOver = addLetter(previousPlayer); //add a letter for failed challenge
+                }
+                if (gameNotOver) {
+                    currentWord = "";
+                    previousPlayer = -1;
+                    currentWordTextView.setText(currentWord);
+                    currentPlayer = nextPlayer(playerTurn);
+                    playerTurn++;
+                    playerTurn(currentPlayer);
+                }
+                else
+                {
+                    endGame();
+                }
+            }
         }
         else
         {
@@ -487,28 +518,6 @@ public class GameScreenActivity extends Activity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-    /*    playerTurn = savedInstanceState.getInt("playerTurn");
-        currentLetter = savedInstanceState.getString("currentLetter");
-        currentWord = savedInstanceState.getString("currentWord");
-        currentPlayer = savedInstanceState.getInt("currentPlayer");
-        previousPlayer = savedInstanceState.getInt("previousPlayer");
-        dropOutCounter = savedInstanceState.getInt("dropOutCounter");
-
-        //Initialize arrays to store player information
-      playerNames = new String[MAX_NUMBER_PLAYERS];
-        playerTypes = new String[MAX_NUMBER_PLAYERS];
-        playerNumbers = new int[MAX_NUMBER_PLAYERS];
-       playerScores = new String[MAX_NUMBER_PLAYERS];
-       playersInGame = new boolean[MAX_NUMBER_PLAYERS];
-       playerRanks = new int[MAX_NUMBER_PLAYERS];
-
-            playerNames = savedInstanceState.getStringArray("playerNames");
-            playerTypes = savedInstanceState.getStringArray("playerTypes");
-            playerNumbers = savedInstanceState.getIntArray("playerNumbers");
-            numberOfPlayers = savedInstanceState.getInt("numberOfPlayers");
-
-            playersInGame = savedInstanceState.getBooleanArray("playersInGame");
-            playerScores = savedInstanceState.getStringArray("playerScores");*/
 
     }
 }
