@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +53,7 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
         redGhost = getResources().getDrawable(R.drawable.redghost);
         greenGhost = getResources().getDrawable(R.drawable.greenghost);
         orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
-        grayGhost = getResources().getDrawable(R.drawable.grayghost);
+        grayGhost = getResources().getDrawable(R.drawable.grayghostnt);
         aiPlayer1 = getResources().getDrawable(R.drawable.aiblue);
         aiPlayer2 = getResources().getDrawable(R.drawable.aired);
         aiPlayer3 = getResources().getDrawable(R.drawable.aigreen);
