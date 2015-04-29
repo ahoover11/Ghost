@@ -45,7 +45,7 @@ public class HomeScreenActivity extends Activity {
 
         ghostImageView.setImageDrawable(ctd);
 
-        ctd.startTransition(1000, 1750);
+        ctd.startTransition(1500, 1750);
     }
 
     public void onButtonClickedHomeScreen(View v)

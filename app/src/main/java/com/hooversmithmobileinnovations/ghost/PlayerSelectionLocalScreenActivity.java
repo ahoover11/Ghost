@@ -67,20 +67,26 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
         playerNamesEditText[3] = (EditText)findViewById(R.id.editTextPlayer4Name);
 
         if(savedInstanceState == null ) {
-            //numberOfPlayers = 0;
             imageViewPlayer1.setImageDrawable(grayGhost);
             playerNamesEditText[0].setText("Player 1");
-            playerNamesEditText[0].setVisibility(View.INVISIBLE);
-            imageViewPlayer2.setImageDrawable(grayGhost);
+            //playerNamesEditText[0].setVisibility(View.INVISIBLE);
+           // imageViewPlayer2.setImageDrawable(grayGhost);
+            imageViewPlayer1.setImageDrawable(blueGhost);
+           // playerNamesEditText[0].setVisibility(View.VISIBLE)
             playerNamesEditText[1].setText("Player 2");
-            playerNamesEditText[1].setVisibility(View.INVISIBLE);
-            imageViewPlayer3.setImageDrawable(grayGhost);
+            //playerNamesEditText[1].setVisibility(View.INVISIBLE);
+           // imageViewPlayer3.setImageDrawable(grayGhost);
             playerNamesEditText[2].setText("Player 3");
             playerNamesEditText[2].setVisibility(View.INVISIBLE);
             imageViewPlayer4.setImageDrawable(grayGhost);
             playerNamesEditText[3].setText("Player 4");
             playerNamesEditText[3].setVisibility(View.INVISIBLE);
-            cycleCount1 = cycleCount2=cycleCount3 = cycleCount4 = 0;
+            cycleCount1= 1;//Set default to human player
+;
+            cycleCount2= 2;//Set default to AI player
+            imageViewPlayer2.setImageDrawable(aiPlayer2);
+
+            cycleCount3 = cycleCount4 = 0;
         }
     }
 

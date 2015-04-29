@@ -35,7 +35,6 @@
         android:onClick="popupButton"
         android:layout_width="150dp"
         android:textColor="#000"
-        android:layout_marginBottom="15dp"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

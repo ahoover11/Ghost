@@ -316,7 +316,22 @@ public class GameScreenActivity extends Activity {
                         //Toast.makeText(getBaseContext(), smartList.get(0), Toast.LENGTH_SHORT).show();
                         char guess;
                         if (smartList.size()>0&&smartList.get(0).length() >currentWord.length() ) {
-                            guess = smartList.get(0).toCharArray()[currentWord.length()];
+                           int minLength = smartList.get(0).length();
+                            int indexOfminLength = 0;
+
+                            int wordSearch = 100;
+                            if (smartList.size()< wordSearch)
+                                    wordSearch = smartList.size()-1;
+
+                            for (int j = 1; j < wordSearch; j++)
+                            {
+                                if (smartList.get(j).length()< minLength&& smartList.get(j).length()>currentWord.length() )
+                                {
+                                    minLength = smartList.get(j).length();
+                                    indexOfminLength = j;
+                                }
+                            }
+                            guess = smartList.get(indexOfminLength).toCharArray()[currentWord.length()];
                         }
                         else
                         {
