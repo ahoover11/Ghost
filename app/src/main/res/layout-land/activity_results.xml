@@ -4,7 +4,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.hooversmithmobileinnovations.ghost.ResultsActivity">
+    tools:context="com.hooversmithmobileinnovations.ghost.ResultsActivity"
+    android:background="@drawable/playerselectionland">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,9 +13,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Final Scores"
         android:id="@+id/textViewFinalScores"
-        android:textSize="60sp"
+        android:textSize="40sp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,8 +28,8 @@
         android:layout_alignParentStart="true">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:id="@+id/imageViewBlueGhost"
             android:src="@drawable/blueghost"
             android:layout_marginTop="10dp" />
@@ -39,7 +41,8 @@
             android:text="Player 1"
             android:id="@+id/textViewPlayer1Name"
             android:layout_weight="0.50"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#ffffff" />
 
         <TextView
             android:layout_width="0dip"
@@ -48,7 +51,8 @@
             android:text="GHOST"
             android:id="@+id/textViewPlayer1Score"
             android:layout_weight="0.40"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#ffffff" />
 
     </LinearLayout>
 
@@ -61,8 +65,8 @@
         android:id="@+id/linearLayout3">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:id="@+id/imageViewOrangeGhost"
             android:src="@drawable/orangeghost"
             android:layout_marginTop="10dp" />
@@ -74,7 +78,8 @@
             android:text="Player 4"
             android:id="@+id/textViewPlayer4Name"
             android:gravity="center"
-            android:layout_weight="0.50" />
+            android:layout_weight="0.50"
+            android:textColor="#ffffff" />
 
         <TextView
             android:layout_width="0dip"
@@ -83,7 +88,8 @@
             android:text="GHOST"
             android:id="@+id/textViewPlayer4Score"
             android:gravity="center"
-            android:layout_weight="0.40" />
+            android:layout_weight="0.40"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
     <LinearLayout
@@ -96,8 +102,8 @@
         android:transitionGroup="true">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:id="@+id/imageViewRedGhost"
             android:src="@drawable/redghost"
             android:layout_marginTop="10dp" />
@@ -109,7 +115,8 @@
             android:text="Player 2"
             android:id="@+id/textViewPlayer2Name"
             android:gravity="center"
-            android:layout_weight="0.50" />
+            android:layout_weight="0.50"
+            android:textColor="#ffffff" />
 
         <TextView
             android:layout_width="0dip"
@@ -118,7 +125,8 @@
             android:text="GHOST"
             android:id="@+id/textViewPlayer2Score"
             android:layout_weight="0.40"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#ffffff" />
 
     </LinearLayout>
 
@@ -131,8 +139,8 @@
         android:layout_centerHorizontal="true">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:id="@+id/imageViewGreenGhost"
             android:src="@drawable/greenghost"
             android:layout_marginTop="10dp" />
@@ -144,7 +152,8 @@
             android:text="Player 3"
             android:id="@+id/textViewPlayer3Name"
             android:layout_weight="0.50"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#ffffff" />
 
         <TextView
             android:layout_width="0dip"
@@ -153,35 +162,44 @@
             android:text="GHOST"
             android:id="@+id/textViewPlayer3Score"
             android:layout_weight="0.40"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="#ffffff" />
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/NewGame"
-        android:id="@+id/buttonNewGame"
-        android:layout_marginTop="23dp"
-        android:background="@drawable/letterbutton"
-        style="@style/standard_button_resultsscreen_landscape"
-        android:layout_below="@+id/linearLayout3"
-        android:layout_alignLeft="@+id/buttonHomeScreen"
-        android:layout_alignStart="@+id/buttonHomeScreen"
-        android:layout_alignRight="@+id/buttonHomeScreen"
-        android:layout_alignEnd="@+id/buttonHomeScreen"
-        android:onClick="onButtonClickedResultsScreen" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home Screen"
-        android:id="@+id/buttonHomeScreen"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        style="@style/standard_button_resultsscreen_landscape"
-        android:background="@drawable/letterbutton"
-        android:onClick="onButtonClickedResultsScreen" />
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/NewGame"
+            android:id="@+id/buttonNewGame"
+            android:background="@drawable/letterbutton"
+            style="@style/standard_button_resultsscreen_landscape"
+            android:layout_below="@+id/linearLayout3"
+            android:layout_alignLeft="@+id/buttonHomeScreen"
+            android:layout_alignStart="@+id/buttonHomeScreen"
+            android:layout_alignRight="@+id/buttonHomeScreen"
+            android:layout_alignEnd="@+id/buttonHomeScreen"
+            android:onClick="onButtonClickedResultsScreen"
+            android:layout_weight="0.5"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Screen"
+            android:id="@+id/buttonHomeScreen"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            style="@style/standard_button_resultsscreen_landscape"
+            android:background="@drawable/letterbutton"
+            android:onClick="onButtonClickedResultsScreen"
+            android:layout_weight="0.5"/>
+    </LinearLayout>
 
 </RelativeLayout>

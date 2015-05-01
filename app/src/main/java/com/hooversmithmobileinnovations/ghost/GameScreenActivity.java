@@ -30,14 +30,16 @@ public class GameScreenActivity extends Activity {
 
     TextView currentLetterTextView, currentWordTextView, playerScoreTextView[], playerNameTextView[]; //TextViews objects
     Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange; //Drawable objects for player types
-    int currentPlayer, numberOfPlayers, playerTurn, previousPlayer, playerNumbers[], playerRanks[]; //Ints to store the current player, the total number of players, the player turn, the previous player, player numbers, and player ranks
+    int currentPlayer, numberOfPlayers, playerTurn, previousPlayer, playerNumbers[], playerRanks[],dropOutCounter; //Ints to store the current player, the total number of players, the player turn, the previous player, player numbers, player ranks, and counter used to keep track of players as they drop out of the gam
     String currentWord, currentLetter, playerScores[], playerNames[], playerTypes[]; //Strings to store the current word, current letter, player scores, player names, and player types
     boolean playersInGame[]; //Boolean array that reflects active players
     Vibrator myVib; //Vibrator object for haptic feedback
     MyDBHandler dbHandler; //Database object used for dictionary lookup
     final static int MAX_NUMBER_PLAYERS = 4; //Int that reflects the maximum possible number of players
     final static int CHALLENGE_REQUEST = 1; //Int used to signify a challenge
-    int dropOutCounter = 0; //Counter used to keep track of players as they drop out of the game
+    double smartGuess = 0.7;
+    double dumbGuess = 0.95;//todo input or final
+    double challengeThreshold = 0.85;
 
 
     @Override
@@ -182,13 +184,34 @@ public class GameScreenActivity extends Activity {
                     boolean gameNotOver = addLetter(currentPlayer);
                     if (gameNotOver)
                     {
-                    previousPlayer = -1;
-                    currentWord = "";
-                    currentWordTextView.setText(currentWord);
-                    currentPlayer = nextPlayer(playerTurn);
-                    playerTurn++;
-                        playerTurn(currentPlayer);
-                        Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
+
+                        // Dialog
+                        final Dialog dialog = new Dialog(GameScreenActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.round_over_popup);
+
+                        TextView text = (TextView) dialog.findViewById(R.id.textViewFinalWord);
+                        text.setText(currentWord);
+                        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+                        dialogButton.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                previousPlayer = -1;
+                                currentWord = "";
+                                currentWordTextView.setText(currentWord);
+                                currentPlayer = nextPlayer(playerTurn);
+                                playerTurn++;
+                                playerTurn(currentPlayer);
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setCancelable(false);
+                        dialog.setCanceledOnTouchOutside(false); //disable back button out
+                        dialog.show();
+
+
                     }else
                     {
                         endGame();//End the game and go to results screen
@@ -268,80 +291,90 @@ public class GameScreenActivity extends Activity {
             dialogButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
                     if (playerTypes[aiPlayer].equals("AI"))
                     {
                         aiTurn(aiPlayer);
                     }
+                    dialog.dismiss();
                 }
             });
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false); //disable back button out
 
             dialog.show();
-
-
     }
 
     public void aiTurn(int player)
     {
-                if (currentWord.length()==0)
+        Random r = new Random();
+        char guess= (char) (r.nextInt(26) + 'A');
+        boolean challenge = false;
+                if (currentWord.length()==0)//Randomly select first letter
                 {
-                    Random r = new Random();
-                    currentLetter = ""+(char) (r.nextInt(26) + 'A');
-                    onSubmit(currentLetterTextView);
+                }else if (currentWord.length() == 1)
+                {
+                    List<String> list = dbHandler.getSuggestions(currentWord);
+                    guess = list.get(r.nextInt(list.size())).toCharArray()[currentWord.length()];
                 }else {
-
                     List<String> list = dbHandler.getSuggestions(currentWord);//For suggestions
-                    if (list.size() == 0) {
+                    if (list.size() == 0&& r.nextDouble()< challengeThreshold) {
+                        challenge = true;
                         onChallenge(currentLetterTextView);
                     } else {
-                        List<String> smartList = new ArrayList<String>();
-                        List<String> stupidList = new ArrayList<String>();
-
+                        List<String> smartList = new ArrayList<String>(); //For holding potentially good guesses
+                        List<String> stupidList = new ArrayList<String>();//For holding potentially poor guesses
                         for (int i = 0; i < list.size(); i++) {
                             int aiPosition = currentWord.length() % (dropOutCounter + 1);
-                            if (list.get(i).length() % (dropOutCounter + 1) - 1 == aiPosition) {
-                                stupidList.add(list.get(i));
+                            if (list.get(i).length() % (dropOutCounter + 1) - 1 == aiPosition||list.get(i).length()==currentWord.length() ) {
+                                    stupidList.add(list.get(i));
                             } else {
                                 smartList.add(list.get(i));
                             }
                         }
 
-                        Collections.shuffle(smartList);
+                        Collections.shuffle(smartList); //Shuffle the two lists
                         Collections.shuffle(stupidList);
 
-
-                        //TODO Random choice between smart stupid
-                        //Toast.makeText(getBaseContext(), smartList.get(0), Toast.LENGTH_SHORT).show();
-                        char guess;
-                        if (smartList.size()>0&&smartList.get(0).length() >currentWord.length() ) {
-                           int minLength = smartList.get(0).length();
-                            int indexOfminLength = 0;
-
-                            int wordSearch = 100;
-                            if (smartList.size()< wordSearch)
-                                    wordSearch = smartList.size()-1;
-
-                            for (int j = 1; j < wordSearch; j++)
-                            {
-                                if (smartList.get(j).length()< minLength&& smartList.get(j).length()>currentWord.length() )
-                                {
-                                    minLength = smartList.get(j).length();
-                                    indexOfminLength = j;
+                        double randomProb =r.nextDouble();
+                        if (randomProb < smartGuess) {
+                            if (smartList.size() > 0 && smartList.get(0).length() > currentWord.length()) {
+                                int minLength = smartList.get(0).length();
+                                int numSearch = 5;//How many words to search through
+                                if (minLength > numSearch) {
+                                    minLength = numSearch;//most searched
                                 }
+                                int index = -1;
+                                boolean wordChosen = false;
+
+                                do {
+                                    index++;
+                                    boolean noSubwords = true;
+                                    for (int i = currentWord.length(); i < smartList.get(index).length() - 1; i++) {
+                                        if (dbHandler.checkWord(smartList.get(index).substring(0, i))) {
+                                            noSubwords = false;
+                                            break;
+                                        }
+                                    }
+                                    if (noSubwords) {
+                                        wordChosen = true;
+                                    }
+                                } while (!wordChosen && index < minLength - 1);
+
+                                guess = smartList.get(index).toCharArray()[currentWord.length()];
                             }
-                            guess = smartList.get(indexOfminLength).toCharArray()[currentWord.length()];
                         }
-                        else
+                        else if (randomProb > smartGuess  && randomProb < dumbGuess&& stupidList.size()> 0 )
                         {
-                            Random r = new Random();
-                            guess = (char) (r.nextInt(26) + 'A');
+                            if (stupidList.get(0).length() > currentWord.length())
+                                guess = stupidList.get(0).toCharArray()[currentWord.length()];
                         }
-                        currentLetter = ("" + guess).toUpperCase();
-                        onSubmit(currentLetterTextView);
+
                     }
                 }
+        if (!challenge) {
+            currentLetter = ("" + guess).toUpperCase();
+            onSubmit(currentLetterTextView);
+        }
     }
 
     private int nextPlayer(int lastPlayer)
@@ -427,7 +460,7 @@ public class GameScreenActivity extends Activity {
             intent.putExtra("currentWord", currentWord);
             if (playerTypes[previousPlayer].equals("HUMAN")) {
                 startActivityForResult(intent, CHALLENGE_REQUEST);
-            }else
+            }else//AI
             {
                 List<String> list = dbHandler.getSuggestions(currentWord);
                 boolean gameNotOver;
@@ -436,7 +469,7 @@ public class GameScreenActivity extends Activity {
                     gameNotOver = addLetter(previousPlayer);
                 }else
                 {
-                    gameNotOver = addLetter(previousPlayer); //add a letter for failed challenge
+                    gameNotOver = addLetter(currentPlayer); //add a letter to AI for failed challenge
                 }
                 if (gameNotOver) {
                     currentWord = "";
@@ -532,7 +565,5 @@ public class GameScreenActivity extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
-
     }
 }

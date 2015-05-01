@@ -386,7 +386,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/VLinearLayout4"
         android:layout_above="@+id/relativeLayout"
-        android:nestedScrollingEnabled="false" />
+         />
 
     <RelativeLayout
         android:layout_width="fill_parent"
