@@ -134,10 +134,10 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/HLinearLayout4">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <Button
             style="@style/standard_button_playerselectionscreen_landscape"
@@ -147,8 +147,7 @@
             android:text="@string/Language"
             android:id="@+id/buttonLanguage"
             android:onClick="onButtonClickedLocalSelectionScreen"
-            android:layout_weight="0.5"
-            android:textColor="#ffffff" />
+            android:layout_weight="0.5" />
 
         <Button
             style="@style/standard_button_playerselectionscreen_landscape"
@@ -157,10 +156,8 @@
             android:layout_height="wrap_content"
             android:text="@string/StartGame"
             android:id="@+id/buttonStartGame"
-            android:layout_marginTop="40dp"
             android:onClick="onButtonClickedLocalSelectionScreen"
-            android:layout_weight="0.5"
-            android:textColor="#ffffff" />
+            android:layout_weight="0.5" />
     </LinearLayout>
 
 </RelativeLayout>

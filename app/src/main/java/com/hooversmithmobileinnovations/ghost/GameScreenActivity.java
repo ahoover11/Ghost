@@ -43,7 +43,7 @@ public class GameScreenActivity extends Activity {
     double challengeThreshold = 0.85;
     CountDownTimer timer;
     long time = 30000;
-    int theTime;
+    long theTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class GameScreenActivity extends Activity {
             playerRanks = savedInstanceState.getIntArray("playerRanks");
 
 
-            theTime = savedInstanceState.getInt("theTime");
+            theTime = savedInstanceState.getLong("theTime");
 
             //Countdown Timer
             timer = new CountDownTimer(theTime, 1000) {
@@ -599,8 +599,8 @@ public class GameScreenActivity extends Activity {
         outState.putBooleanArray("playersInGame", playersInGame);
 
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
-        theTime = Integer.parseInt(timerTextView.getText().toString());
-        outState.putInt("theTime",theTime);
+        theTime = Long.parseLong(timerTextView.getText().toString());
+        outState.putLong("theTime",theTime);
         timer.cancel();
 
         super.onSaveInstanceState(outState);

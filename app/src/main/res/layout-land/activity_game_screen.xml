@@ -259,7 +259,7 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
         android:layout_centerHorizontal="true"
         android:id="@+id/VLinearLayout4">
 
@@ -372,23 +372,6 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/DefaultWord"
-        android:id="@+id/textViewCurrentWord"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        android:typeface="normal"
-        android:gravity="center_vertical|center_horizontal"
-        android:textColor="#fff"
-        android:nestedScrollingEnabled="false"
-        android:layout_above="@+id/textViewCurrentLetter"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -402,7 +385,7 @@
         android:textAlignment="center"
         android:text="A"
         android:layout_above="@+id/VLinearLayout3"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerInParent="true" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -413,15 +396,17 @@
         android:id="@+id/RelativeLayout2">
 
         <Button
-            style="@style/standard_button_gamescreen_portrait"
+            style="@style/standard_button_gamescreen_landscape"
             android:background="@drawable/letterbutton"
             android:text="@string/Submit"
             android:id="@+id/buttonSubmit"
             android:onClick="onSubmit"
-            android:layout_width="130dp"
+            android:layout_width="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -433,51 +418,75 @@
         android:id="@+id/RelativeLayout3">
 
         <Button
-            style="@style/standard_button_gamescreen_portrait"
+            style="@style/standard_button_gamescreen_landscape"
             android:background="@drawable/letterbutton"
             android:text="@string/Challenge"
             android:id="@+id/buttonChallenge"
             android:layout_width="130dp"
             android:onClick="onChallenge"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:textSize="19sp" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/textViewCurrentWord"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/VLinearLayout4"
-        android:id="@+id/HLinearLayout1">
+        android:id="@+id/HLinearLayout1"
+        android:baselineAligned="false">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="TIME: "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/TIME"
             android:id="@+id/textViewTime"
             android:textSize="25sp"
             android:textColor="#ffffff"
-            android:layout_gravity="center"
             android:gravity="center_vertical|right"
             android:textStyle="bold"
             android:layout_weight="0.5" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="00"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/zerozero"
             android:id="@+id/textViewTimer"
             android:layout_weight="0.5"
             android:textSize="25sp"
             android:textColor="#ffffff"
             android:gravity="left|center_vertical" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/HLinearLayout1"
+        android:layout_above="@+id/textViewCurrentLetter">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/DefaultWord"
+            android:id="@+id/textViewCurrentWord"
+            android:textSize="60sp"
+            android:textStyle="bold"
+            android:typeface="normal"
+            android:textColor="#fff"
+            android:nestedScrollingEnabled="false"
+            android:layout_above="@+id/textViewCurrentLetter"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:gravity="center_vertical|center_horizontal" />
     </LinearLayout>
 
 </RelativeLayout>
