@@ -10,17 +10,16 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/VLinearLayout3"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/VLinearLayout3">
+        android:layout_centerHorizontal="true">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
             android:id="@+id/HLinearLayout5">
@@ -190,8 +189,8 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
             android:id="@+id/HLinearLayout7">
@@ -377,24 +376,41 @@
         android:layout_height="wrap_content"
         android:text="@string/DefaultWord"
         android:id="@+id/textViewCurrentWord"
-        android:textSize="75sp"
+        android:textSize="60sp"
         android:textStyle="bold"
         android:typeface="normal"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#fff"
+        android:nestedScrollingEnabled="false"
+        android:layout_above="@+id/textViewCurrentLetter"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/VLinearLayout4"
-        android:layout_above="@+id/relativeLayout"
-        android:nestedScrollingEnabled="false" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+
+        android:id="@+id/textViewCurrentLetter"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:textColor="#ffff050e"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="top"
+        android:textAlignment="center"
+        android:text="A"
+        android:layout_above="@+id/VLinearLayout3"
+        android:layout_centerHorizontal="true" />
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/VLinearLayout3"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/relativeLayout">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/VLinearLayout3"
+        android:layout_toStartOf="@+id/VLinearLayout3"
+        android:layout_alignTop="@+id/VLinearLayout3"
+        android:id="@+id/RelativeLayout2">
 
         <Button
             style="@style/standard_button_gamescreen_portrait"
@@ -402,40 +418,66 @@
             android:text="@string/Submit"
             android:id="@+id/buttonSubmit"
             android:onClick="onSubmit"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_width="130dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/VLinearLayout3"
+        android:layout_toEndOf="@+id/VLinearLayout3"
+        android:layout_alignTop="@+id/VLinearLayout3"
+        android:id="@+id/RelativeLayout3">
 
         <Button
             style="@style/standard_button_gamescreen_portrait"
             android:background="@drawable/letterbutton"
             android:text="@string/Challenge"
             android:id="@+id/buttonChallenge"
-            android:layout_alignParentTop="true"
+            android:layout_width="130dp"
+            android:onClick="onChallenge"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_width="130dp"
-            android:layout_marginBottom="15dp"
-            android:onClick="onChallenge" />
+            android:textSize="19sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/textViewCurrentWord"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/VLinearLayout4"
+        android:id="@+id/HLinearLayout1">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-
-            android:id="@+id/textViewCurrentLetter"
-            android:textSize="40sp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_height="fill_parent"
+            android:text="TIME: "
+            android:id="@+id/textViewTime"
+            android:textSize="25sp"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|right"
             android:textStyle="bold"
-            android:textColor="#ffff050e"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="15dp"
-            android:layout_gravity="top"
-            android:textAlignment="center"
-            android:text="A" />
-    </RelativeLayout>
+            android:layout_weight="0.5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="00"
+            android:id="@+id/textViewTimer"
+            android:layout_weight="0.5"
+            android:textSize="25sp"
+            android:textColor="#ffffff"
+            android:gravity="left|center_vertical" />
+
+    </LinearLayout>
 
 </RelativeLayout>

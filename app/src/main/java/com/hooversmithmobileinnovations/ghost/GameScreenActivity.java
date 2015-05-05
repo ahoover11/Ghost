@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -40,7 +41,9 @@ public class GameScreenActivity extends Activity {
     double smartGuess = 0.7;
     double dumbGuess = 0.95;//todo input or final
     double challengeThreshold = 0.85;
-
+    CountDownTimer timer;
+    long time = 30000;
+    int theTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +106,25 @@ public class GameScreenActivity extends Activity {
             playerScores = savedInstanceState.getStringArray("playerScores");
 
             playersInGame = savedInstanceState.getBooleanArray("playersInGame");
-            playerRanks= savedInstanceState.getIntArray("playerRanks");
+            playerRanks = savedInstanceState.getIntArray("playerRanks");
+
+
+            theTime = savedInstanceState.getInt("theTime");
+
+            //Countdown Timer
+            timer = new CountDownTimer(theTime, 1000) {
+                TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timerTextView.setText(Long.toString(millisUntilFinished / 1000));
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
+
 
         }
 
@@ -140,6 +161,19 @@ public class GameScreenActivity extends Activity {
 
         myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
+        //Countdown Timer
+        timer = new CountDownTimer(time, 1000) {
+            TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTextView.setText(Long.toString(millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
 
 
         for(int i = 0; i < MAX_NUMBER_PLAYERS; i++)   //Update textViews to current player scores
@@ -174,6 +208,9 @@ public class GameScreenActivity extends Activity {
             currentWord += currentLetter;
             currentWordTextView.setText(currentWord);
             currentLetterTextView.setText("");
+
+            //Stop the timer
+            timer.cancel();
 
             //Only check if player created word if length greater than 3
             if (currentWord.length() > 3) {
@@ -210,8 +247,6 @@ public class GameScreenActivity extends Activity {
                         dialog.setCancelable(false);
                         dialog.setCanceledOnTouchOutside(false); //disable back button out
                         dialog.show();
-
-
                     }else
                     {
                         endGame();//End the game and go to results screen
@@ -245,7 +280,7 @@ public class GameScreenActivity extends Activity {
         playerNameTextView[player].setTextColor(Color.BLUE);
 
 
-        // Dialog
+            // Dialog
             final Dialog dialog = new Dialog(GameScreenActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.next_turn_popup);
@@ -285,7 +320,7 @@ public class GameScreenActivity extends Activity {
             }
 
             //If button is clicked, close the custom dialog
-        final int aiPlayer = player;
+            final int aiPlayer = player;
 
             Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
             dialogButton.setOnClickListener(new OnClickListener() {
@@ -296,6 +331,9 @@ public class GameScreenActivity extends Activity {
                         aiTurn(aiPlayer);
                     }
                     dialog.dismiss();
+                    if (playerTypes[aiPlayer].equals("HUMAN")){
+                        timer.start();
+                    }
                 }
             });
             dialog.setCancelable(false);
@@ -543,7 +581,6 @@ public class GameScreenActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-
         outState.putInt("playerTurn", playerTurn);
         outState.putString("currentLetter", currentLetter);
         outState.putString("currentWord", currentWord);
@@ -559,7 +596,13 @@ public class GameScreenActivity extends Activity {
         outState.putIntArray("playerNumbers", playerNumbers);
 
         outState.putIntArray("playerRanks", playerRanks);
-        outState.putBooleanArray("playersInGame",playersInGame);
+        outState.putBooleanArray("playersInGame", playersInGame);
+
+        TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
+        theTime = Integer.parseInt(timerTextView.getText().toString());
+        outState.putInt("theTime",theTime);
+        timer.cancel();
+
         super.onSaveInstanceState(outState);
 }
     @Override

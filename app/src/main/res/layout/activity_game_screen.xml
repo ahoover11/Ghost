@@ -377,16 +377,15 @@
         android:layout_height="wrap_content"
         android:text="@string/DefaultWord"
         android:id="@+id/textViewCurrentWord"
-        android:textSize="75sp"
+        android:textSize="65sp"
         android:textStyle="bold"
         android:typeface="normal"
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#fff"
+        android:layout_above="@+id/relativeLayout"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/VLinearLayout4"
-        android:layout_above="@+id/relativeLayout"
-         />
+        android:layout_marginBottom="100dp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -438,5 +437,37 @@
             android:text="A" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout6"
+        android:layout_below="@+id/VLinearLayout4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="TIME: "
+            android:id="@+id/textViewTime"
+            android:textSize="35sp"
+            android:textColor="#ffffff"
+            android:layout_weight="0.5"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="00"
+            android:id="@+id/textViewTimer"
+            android:layout_weight="0.5"
+            android:textSize="35sp"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
 
 </RelativeLayout>
