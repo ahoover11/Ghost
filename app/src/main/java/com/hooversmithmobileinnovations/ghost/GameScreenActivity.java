@@ -196,30 +196,7 @@ public class GameScreenActivity extends Activity {
                     {
                        // Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
 
-                        //Dialog that depicts which player completed a word
-                        final Dialog dialog = new Dialog(GameScreenActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.round_over_popup);
-
-                        TextView text = (TextView) dialog.findViewById(R.id.textViewFinalWord);
-                        text.setText(currentWord);
-                        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
-                        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
-                        dialogButton.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                previousPlayer = -1;
-                                currentWord = "";
-                                currentWordTextView.setText(currentWord);
-                                currentPlayer = nextPlayer(playerTurn);
-                                playerTurn++;
-                                playerTurn(currentPlayer);
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.setCancelable(false);
-                        dialog.setCanceledOnTouchOutside(false); //disable back button out
-                        dialog.show();
+                        roundEndDialog(currentWord);
                     }else
                     {
                         endGame();//End the game and go to results screen
@@ -241,10 +218,37 @@ public class GameScreenActivity extends Activity {
         //Reset current letter;
         currentLetter = "";
     }
+    public void roundEndDialog(String endingWord)
+    {
+        //Dialog that depicts which player completed a word
+        final Dialog dialog = new Dialog(GameScreenActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.round_over_popup);
 
+        TextView text = (TextView) dialog.findViewById(R.id.textViewFinalWord);
+        text.setText(endingWord);
+        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+        dialogButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                previousPlayer = -1;
+                currentWord = "";
+                currentWordTextView.setText(currentWord);
+                currentPlayer = nextPlayer(playerTurn);
+                playerTurn++;
+                playerTurn(currentPlayer);
+                dialog.dismiss();
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false); //disable back button out
+        dialog.show();
+    }
     public void playerTurn(int player)
     {
-
+        TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
+        timerTextView.setText(Long.toString(time/1000));
         //Set all player names to black if it is not their turn
         for (int i = 0; i < numberOfPlayers; i++)
         {
@@ -311,8 +315,10 @@ public class GameScreenActivity extends Activity {
                     //Start the timer for a human player
                     if (playerTypes[aiPlayer].equals("HUMAN")){
                         //Countdown Timer
+
                         timer = new CountDownTimer(time, 1000) {
                             TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
+
                             @Override
                             public void onTick(long millisUntilFinished) {
                                 timerTextView.setText(Long.toString(millisUntilFinished / 1000));
@@ -320,10 +326,19 @@ public class GameScreenActivity extends Activity {
 
                             @Override
                             public void onFinish() {
+                                boolean gameNotOver = addLetter(currentPlayer);
+                                if (gameNotOver)
+                                {
+                                    roundEndDialog("Time's Up!");
+                                }else
+                                {
+                                    endGame();//End the game and go to results screen
+                                }
 
                             }
                         }.start();
                     }
+
                 }
             });
             dialog.setCancelable(false);
@@ -338,7 +353,7 @@ public class GameScreenActivity extends Activity {
         char guess= (char) (r.nextInt(26) + 'A');
         boolean challenge = false;
         if (currentWord.length()==0)//Randomly select first letter
-        {
+        {//Do nothing
         }else if (currentWord.length() == 1)
         {
             List<String> list = dbHandler.getSuggestions(currentWord);
@@ -595,7 +610,7 @@ public class GameScreenActivity extends Activity {
 
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
         time = Long.parseLong(timerTextView.getText().toString());
-        outState.putLong("time", time);
+        outState.putLong("time", time*1000);
 
         super.onSaveInstanceState(outState);
     }
