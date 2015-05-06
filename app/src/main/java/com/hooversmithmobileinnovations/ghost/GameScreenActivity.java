@@ -218,6 +218,14 @@ public class GameScreenActivity extends Activity {
     }
     public void roundEndDialog(String endingWord)
     {
+        timer.cancel();
+
+        previousPlayer = -1;
+        currentWord = "";
+        currentWordTextView.setText(currentWord);
+        currentPlayer = nextPlayer(playerTurn);
+        playerTurn++;
+
         //Dialog that depicts which player completed a word
         final Dialog dialog = new Dialog(GameScreenActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -225,17 +233,12 @@ public class GameScreenActivity extends Activity {
 
         TextView text = (TextView) dialog.findViewById(R.id.textViewFinalWord);
         text.setText(endingWord);
-        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+        //ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
         Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
         dialogButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                previousPlayer = -1;
-                currentWord = "";
-                currentWordTextView.setText(currentWord);
-                currentPlayer = nextPlayer(playerTurn);
-                playerTurn++;
                 playerTurn(currentPlayer);
             }
         });
@@ -333,6 +336,7 @@ public class GameScreenActivity extends Activity {
                             {
                                 endGame();//End the game and go to results screen
                             }
+                            timer.cancel();
 
                         }
                     }.start();
