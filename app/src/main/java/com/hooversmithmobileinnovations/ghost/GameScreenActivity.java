@@ -39,7 +39,7 @@ public class GameScreenActivity extends Activity {
     final static int MAX_NUMBER_PLAYERS = 4; //Int that reflects the maximum possible number of players
     final static int CHALLENGE_REQUEST = 1; //Int used to signify a challenge
     double smartGuess = 0.7;
-    double dumbGuess = 0.95;//todo input or final
+    double dumbGuess = 0.95;
     double challengeThreshold = 0.85;
     CountDownTimer timer;
     long time = 30000;
@@ -346,7 +346,7 @@ public class GameScreenActivity extends Activity {
                         }
 
                         @Override
-                        public void onFinish() {//todo
+                        public void onFinish() {
                         timeUp();
                             timerTextView.setText("0");
 
@@ -547,7 +547,7 @@ public class GameScreenActivity extends Activity {
                 List<String> list = dbHandler.getSuggestions(currentWord);
                 boolean gameNotOver;
                 String message;
-                if(list.size()<1)//todo chance bad guess
+                if(list.size()<1)
                 {
                     gameNotOver = addLetter(previousPlayer);
                     message = "Challenge Lost!";

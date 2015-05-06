@@ -131,12 +131,11 @@
             android:textColor="#fff" />
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/VLinearLayout4"
         android:layout_below="@+id/HLinearLayout4">
 
         <Button
@@ -147,9 +146,10 @@
             android:text="@string/StartGame"
             android:id="@+id/buttonStartGame"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
             android:onClick="onButtonClickedLocalSelectionScreen"
-            android:textColor="#ffffff" />
-    </LinearLayout>
+            android:textColor="#ffffff"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 </RelativeLayout>
