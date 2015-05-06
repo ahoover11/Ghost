@@ -144,18 +144,6 @@
             android:background="@drawable/letterbutton"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/Language"
-            android:id="@+id/buttonLanguage"
-            android:layout_gravity="bottom|center"
-            android:layout_marginTop="70dp"
-            android:onClick="onButtonClickedLocalSelectionScreen"
-            android:textColor="#ffffff" />
-
-        <Button
-            style="@style/standard_button_playerselectionscreen_portrait"
-            android:background="@drawable/letterbutton"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
             android:text="@string/StartGame"
             android:id="@+id/buttonStartGame"
             android:layout_gravity="center"

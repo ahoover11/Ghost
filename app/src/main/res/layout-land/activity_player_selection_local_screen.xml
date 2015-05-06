@@ -133,31 +133,24 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <Button
-            style="@style/standard_button_playerselectionscreen_landscape"
-            android:background="@drawable/letterbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Language"
-            android:id="@+id/buttonLanguage"
-            android:onClick="onButtonClickedLocalSelectionScreen"
-            android:layout_weight="0.5" />
-
-        <Button
-            style="@style/standard_button_playerselectionscreen_landscape"
-            android:background="@drawable/letterbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/StartGame"
-            android:id="@+id/buttonStartGame"
-            android:onClick="onButtonClickedLocalSelectionScreen"
-            android:layout_weight="0.5" />
     </LinearLayout>
+
+    <Button
+        style="@style/standard_button_playerselectionscreen_landscape"
+        android:background="@drawable/letterbutton"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/StartGame"
+        android:id="@+id/buttonStartGame"
+        android:onClick="onButtonClickedLocalSelectionScreen"
+        android:layout_weight="0.5"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

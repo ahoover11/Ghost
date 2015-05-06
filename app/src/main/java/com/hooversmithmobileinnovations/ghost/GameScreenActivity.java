@@ -33,7 +33,7 @@ public class GameScreenActivity extends Activity {
     Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange; //Drawable objects for player types
     int currentPlayer, numberOfPlayers, playerTurn, previousPlayer, playerNumbers[], playerRanks[],dropOutCounter; //Ints to store the current player, the total number of players, the player turn, the previous player, player numbers, player ranks, and counter used to keep track of players as they drop out of the gam
     String currentWord, currentLetter, playerScores[], playerNames[], playerTypes[]; //Strings to store the current word, current letter, player scores, player names, and player types
-    boolean playersInGame[]; //Boolean array that reflects active players
+    boolean playersInGame[], timerOff; //Boolean array that reflects active players
     Vibrator myVib; //Vibrator object for haptic feedback
     MyDBHandler dbHandler; //Database object used for dictionary lookup
     final static int MAX_NUMBER_PLAYERS = 4; //Int that reflects the maximum possible number of players
@@ -57,7 +57,7 @@ public class GameScreenActivity extends Activity {
             currentWord = "";
             currentPlayer = 0;
             previousPlayer = -1;
-
+            timerOff =true;
 
             //Initialize arrays to store player information
             playerNames = new String[MAX_NUMBER_PLAYERS];
@@ -115,6 +115,7 @@ public class GameScreenActivity extends Activity {
             if(timer != null) {
                 timer.cancel();
             }
+            timerOff = savedInstanceState.getBoolean("timerOff");
         }
 
         playerScoreTextView = new TextView[MAX_NUMBER_PLAYERS];
@@ -188,6 +189,7 @@ public class GameScreenActivity extends Activity {
             if(timer != null) {
                 timer.cancel();
             }
+            timerOff = true;
             time = 30000;
 
             //Only check if player created a word if length greater than 3
@@ -224,9 +226,12 @@ public class GameScreenActivity extends Activity {
     }
     public void roundEndDialog(String endingWord)
     {
+
+
         if(timer != null) {
             timer.cancel();
         }
+        timerOff = true;
 
         previousPlayer = -1;
         currentWord = "";
@@ -248,6 +253,10 @@ public class GameScreenActivity extends Activity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                Activity a = GameScreenActivity.this;
+                while(a.getParent() != null) {
+                    a = a.getParent();
+                }
                 playerTurn(currentPlayer);
             }
         });
@@ -327,6 +336,7 @@ public class GameScreenActivity extends Activity {
                 //Start the timer for a human player
                 if (playerTypes[aiPlayer].equals("HUMAN")){
                     //Countdown Timer
+                    timerOff = false;
                     timer = new CountDownTimer(time, 1000) {
                         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
 
@@ -336,18 +346,14 @@ public class GameScreenActivity extends Activity {
                         }
 
                         @Override
-                        public void onFinish() {
-                            boolean gameNotOver = addLetter(currentPlayer);
-                            if (gameNotOver)
-                            {
-                                roundEndDialog("Time's Up!");
-                            }else
-                            {
-                                endGame();//End the game and go to results screen
-                            }
+                        public void onFinish() {//todo
+                        timeUp();
+                            timerTextView.setText("0");
+
                             if(timer != null) {
                                 timer.cancel();
                             }
+                            timerOff = true;
                         }
                     }.start();
                 }
@@ -357,6 +363,18 @@ public class GameScreenActivity extends Activity {
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false); //disable back button out
         dialog.show();
+    }
+
+    public void timeUp()
+    {
+        if(!timerOff) {
+            boolean gameNotOver = addLetter(currentPlayer);
+            if (gameNotOver) {
+                roundEndDialog("Time's Up!");
+            } else {
+                endGame();//End the game and go to results screen
+            }
+        }
     }
 
     public void aiTurn(int player)
@@ -516,6 +534,7 @@ public class GameScreenActivity extends Activity {
             if(timer != null) {
                 timer.cancel();
             }
+            timerOff = true;
             Intent intent = new Intent(this, ChallengeActivity.class);
             int playerBeingChallenged = previousPlayer;
 
@@ -620,6 +639,7 @@ public class GameScreenActivity extends Activity {
         if(timer != null) {
             timer.cancel();
         }
+        outState.putBoolean("timerOff", timerOff);
         super.onSaveInstanceState(outState);
     }
 

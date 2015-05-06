@@ -41,7 +41,7 @@ public class PlayerSelectionLocalScreenActivity extends Activity {
             playerNumbers[i] = 0;
         }
 
-        buttonLanguage = (Button)findViewById(R.id.buttonLanguage);
+
         buttonStartGame = (Button)findViewById(R.id.buttonStartGame);
 
         imageViewPlayer1 = (ImageView)findViewById(R.id.imageViewBlueGhost);

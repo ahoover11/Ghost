@@ -27,7 +27,7 @@
         android:id="@+id/HlinearLayout7">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="@string/Back"
             android:id="@+id/buttonBack"
@@ -45,11 +45,49 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
+
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/scrollViewRules"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true" >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editText"
+                    android:text="@string/Rules1"
+                    android:textColor="#ff4eff0c"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Rules2"
+                    android:textColor="#ffff26b0"
+                    android:id="@+id/editText2"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Thanks NASA / Google Robot"
+                    android:textColor="#ffff26b0"
+                    android:id="@+id/textView2"
+                    android:gravity="center_horizontal" />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+
     </RelativeLayout>
 </RelativeLayout>

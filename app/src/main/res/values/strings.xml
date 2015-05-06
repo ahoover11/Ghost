@@ -30,5 +30,11 @@
     <string name="TIME">TIME:</string>
     <string name="title_activity_rules">RulesActivity</string>
     <string name="Back">BACK</string>
+    <string name="Rules1">Ghost is an epic word game of strategy and lexicographical knowledge.
+
+
+    </string>
+    <string name="Rules2">        Players take turns adding letters to the end of a sequence of letters.
+        Unlike typical word games, the goal is to NOT generate a word. Like the basketball shooting games of "HORSE" or "PIG," players are assigned letters in the word "GHOST" if they complete a word.</string>
 
 </resources>
