@@ -10,12 +10,11 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="325dp"
         android:layout_height="wrap_content"
+        android:id="@+id/VLinearLayout3"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/VLinearLayout3">
+        android:layout_centerHorizontal="true">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -256,36 +255,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/VLinearLayout4">
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/VLinearLayout3"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/relativeLayout">
-
-        <Button
-            style="@style/standard_button_challengescreen_portrait"
-            android:background="@drawable/letterbutton"
-            android:text="@string/Backspace"
-            android:id="@+id/buttonBackspace"
-            android:layout_width="130dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp" />
-
-    </RelativeLayout>
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -304,11 +273,12 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
-        android:layout_above="@+id/buttonSubmit">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView"
+        android:layout_above="@+id/VLinearLayout3">
 
         <TextView
             android:layout_width="wrap_content"
@@ -344,20 +314,44 @@
             android:layout_below="@+id/textView"
             android:layout_above="@+id/relativeLayout"
             android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 
-    <Button
-        style="@style/standard_button_challengescreen_portrait"
-        android:background="@drawable/letterbutton"
-        android:text="@string/Submit"
-        android:id="@+id/buttonSubmit"
-        android:onClick="onSubmit"
-        android:layout_width="130dp"
-        android:layout_above="@+id/relativeLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:textColor="#ffff050e"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_toStartOf="@+id/VLinearLayout3"
+        android:layout_alignTop="@+id/VLinearLayout3">
+
+        <Button
+            style="@style/standard_button_challengescreen_landscape"
+            android:background="@drawable/letterbutton"
+            android:text="@string/Submit"
+            android:id="@+id/buttonSubmit"
+            android:onClick="onSubmit"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@+id/VLinearLayout3"
+        android:layout_toEndOf="@+id/VLinearLayout3"
+        android:layout_alignTop="@+id/VLinearLayout3">
+
+        <Button
+            style="@style/standard_button_challengescreen_landscape"
+            android:background="@drawable/letterbutton"
+            android:text="@string/Backspace"
+            android:id="@+id/buttonBackspace"
+            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
 
 
 </RelativeLayout>
