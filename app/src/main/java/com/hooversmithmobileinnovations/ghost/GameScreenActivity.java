@@ -111,6 +111,10 @@ public class GameScreenActivity extends Activity {
             playerRanks = savedInstanceState.getIntArray("playerRanks");
 
             time = savedInstanceState.getLong("time");
+            timer = (CountDownTimer) getLastNonConfigurationInstance();
+            if(timer != null) {
+                timer.cancel();
+            }
         }
 
         playerScoreTextView = new TextView[MAX_NUMBER_PLAYERS];
@@ -181,7 +185,9 @@ public class GameScreenActivity extends Activity {
             currentLetterTextView.setText("");
 
             //Stop the timer
-            timer.cancel();
+            if(timer != null) {
+                timer.cancel();
+            }
             time = 30000;
 
             //Only check if player created a word if length greater than 3
@@ -218,13 +224,16 @@ public class GameScreenActivity extends Activity {
     }
     public void roundEndDialog(String endingWord)
     {
-        timer.cancel();
+        if(timer != null) {
+            timer.cancel();
+        }
 
         previousPlayer = -1;
         currentWord = "";
         currentWordTextView.setText(currentWord);
         currentPlayer = nextPlayer(playerTurn);
         playerTurn++;
+        time = 30000;
 
         //Dialog that depicts which player completed a word
         final Dialog dialog = new Dialog(GameScreenActivity.this);
@@ -336,8 +345,9 @@ public class GameScreenActivity extends Activity {
                             {
                                 endGame();//End the game and go to results screen
                             }
-                            timer.cancel();
-
+                            if(timer != null) {
+                                timer.cancel();
+                            }
                         }
                     }.start();
                 }
@@ -502,7 +512,10 @@ public class GameScreenActivity extends Activity {
     {
         //Check that we are not on a new word (previousPlayer = -1)
         if (previousPlayer >= 0)
-          {timer.cancel();
+        {
+            if(timer != null) {
+                timer.cancel();
+            }
             Intent intent = new Intent(this, ChallengeActivity.class);
             int playerBeingChallenged = previousPlayer;
 
@@ -532,9 +545,7 @@ public class GameScreenActivity extends Activity {
                     endGame();
                 }
             }
-        }
-        else
-        {
+        } else {
             Toast toast = Toast.makeText(getBaseContext(), "No Challenges Yet, wait until the word is started!", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
@@ -608,6 +619,11 @@ public class GameScreenActivity extends Activity {
         outState.putLong("time", time*1000);
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return timer;
     }
 
     @Override
