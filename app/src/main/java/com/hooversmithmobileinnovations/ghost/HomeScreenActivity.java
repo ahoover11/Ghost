@@ -58,7 +58,7 @@ public class HomeScreenActivity extends Activity {
 
         }else if(v == rulesButton){
             //display game rules
-
+            startActivity(new Intent(this, RulesActivity.class));
         }
     }
 

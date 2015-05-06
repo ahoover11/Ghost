@@ -487,6 +487,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
             android:gravity="center_vertical|center_horizontal" />
+
     </LinearLayout>
 
 </RelativeLayout>

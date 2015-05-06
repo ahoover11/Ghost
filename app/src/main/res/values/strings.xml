@@ -28,5 +28,7 @@
     <string name="NewGame">New Game</string>
     <string name="zerozero">00</string>
     <string name="TIME">TIME:</string>
+    <string name="title_activity_rules">RulesActivity</string>
+    <string name="Back">BACK</string>
 
 </resources>

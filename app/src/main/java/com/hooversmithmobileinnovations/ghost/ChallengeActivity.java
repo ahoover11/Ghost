@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,16 +87,22 @@ public void onSubmit(View v)
 
     if (finalGuess.length() < 4)
     {
+        Toast toast = Toast.makeText(getBaseContext(), "You lose the challenge,the word is too short!", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
         isChallengeWon = false;
-        Toast.makeText(getBaseContext(), "You lose the challenge,the word is too short!", Toast.LENGTH_SHORT).show();
         finish();
     }else if (dbHandler.checkWord(finalGuess.toLowerCase())) {
-            Toast.makeText(getBaseContext(), "You Win the Challenge!", Toast.LENGTH_SHORT).show();
-            isChallengeWon = true;
-            finish();
-        }else
+        Toast toast = Toast.makeText(getBaseContext(), "You win the Challenge!", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+        isChallengeWon = true;
+        finish();
+    }else
     {
-        Toast.makeText(getBaseContext(), "Not a valid word.", Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(getBaseContext(), "Not a valid word.", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
         isChallengeWon = false;
         finish();
     }
