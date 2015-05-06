@@ -616,8 +616,10 @@ public class GameScreenActivity extends Activity {
 
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
         time = Long.parseLong(timerTextView.getText().toString());
-        outState.putLong("time", time*1000);
-
+        outState.putLong("time",  time*1000);
+        if(timer != null) {
+            timer.cancel();
+        }
         super.onSaveInstanceState(outState);
     }
 

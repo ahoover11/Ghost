@@ -39,7 +39,14 @@ public class ChallengeActivity extends Activity {
 
         currentWordTextView = (TextView) findViewById(R.id.textViewWordStart);
         endingTextView =(TextView) findViewById(R.id.endingTextView);
-        currentGuess = "";
+        if(savedInstanceState == null ) //for first time
+        {
+        currentGuess = "";}
+        else
+        {
+            currentGuess = savedInstanceState.getString("currentGuess");
+            endingTextView.setText(currentGuess);
+        }
         endingTextView.setText(currentGuess);
         myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
@@ -141,4 +148,12 @@ public void onSubmit(View v)
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putString("currentGuess", currentGuess);
+        super.onSaveInstanceState(outState);
+    }
+
 }
