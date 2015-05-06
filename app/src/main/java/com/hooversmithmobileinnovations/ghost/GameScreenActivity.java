@@ -111,7 +111,6 @@ public class GameScreenActivity extends Activity {
             playerRanks = savedInstanceState.getIntArray("playerRanks");
 
             time = savedInstanceState.getLong("time");
-
         }
 
         playerScoreTextView = new TextView[MAX_NUMBER_PLAYERS];
@@ -194,8 +193,7 @@ public class GameScreenActivity extends Activity {
                     boolean gameNotOver = addLetter(currentPlayer);
                     if (gameNotOver)
                     {
-                       // Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
-
+                        //Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
                         roundEndDialog(currentWord);
                     }else
                     {
@@ -232,13 +230,13 @@ public class GameScreenActivity extends Activity {
         dialogButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 previousPlayer = -1;
                 currentWord = "";
                 currentWordTextView.setText(currentWord);
                 currentPlayer = nextPlayer(playerTurn);
                 playerTurn++;
                 playerTurn(currentPlayer);
-                dialog.dismiss();
             }
         });
         dialog.setCancelable(false);
@@ -249,102 +247,102 @@ public class GameScreenActivity extends Activity {
     {
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
         timerTextView.setText(Long.toString(time/1000));
+
         //Set all player names to black if it is not their turn
         for (int i = 0; i < numberOfPlayers; i++)
         {
             playerNameTextView[i].setTextColor(Color.BLACK);
         }
+
         //Set the active player's name to blue
         playerNameTextView[player].setTextColor(Color.BLUE);
 
 
-            //Dialog that depicts which player's turn it is
-            final Dialog dialog = new Dialog(GameScreenActivity.this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.next_turn_popup);
+        //Dialog that depicts which player's turn it is
+        final Dialog dialog = new Dialog(GameScreenActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.next_turn_popup);
 
-            TextView text = (TextView) dialog.findViewById(R.id.popupPlayerTextView);
-            text.setText(playerNames[player]);
-            ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
-            switch (playerNumbers[player]) {
-                case 0:
-                    if (playerTypes[player].equals("HUMAN")) {
-                        image.setImageDrawable(blueGhost);
-                    } else {
-                        image.setImageDrawable(aiBlue);
-                    }
-                    break;
-                case 1:
-                    if (playerTypes[player].equals("HUMAN")) {
-                        image.setImageDrawable(redGhost);
-                    } else {
-                        image.setImageDrawable(aiRed);
-                    }
-                    break;
-                case 2:
-                    if (playerTypes[player].equals("HUMAN")) {
-                        image.setImageDrawable(greenGhost);
-                    } else {
-                        image.setImageDrawable(aiGreen);
-                    }
-                    break;
-                case 3:
-                    if (playerTypes[player].equals("HUMAN")) {
-                        image.setImageDrawable(orangeGhost);
-                    } else {
-                        image.setImageDrawable(aiOrange);
-                    }
-                    break;
-            }
-
-
-            final int aiPlayer = player;
-
-            //If button is clicked, close the custom dialog
-            Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
-            dialogButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (playerTypes[aiPlayer].equals("AI"))
-                    {
-                        aiTurn(aiPlayer);
-                    }
-
-                    dialog.dismiss();
-
-                    //Start the timer for a human player
-                    if (playerTypes[aiPlayer].equals("HUMAN")){
-                        //Countdown Timer
-
-                        timer = new CountDownTimer(time, 1000) {
-                            TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
-
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                timerTextView.setText(Long.toString(millisUntilFinished / 1000));
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                boolean gameNotOver = addLetter(currentPlayer);
-                                if (gameNotOver)
-                                {
-                                    roundEndDialog("Time's Up!");
-                                }else
-                                {
-                                    endGame();//End the game and go to results screen
-                                }
-
-                            }
-                        }.start();
-                    }
-
+        TextView text = (TextView) dialog.findViewById(R.id.popupPlayerTextView);
+        text.setText(playerNames[player]);
+        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+        switch (playerNumbers[player]) {
+            case 0:
+                if (playerTypes[player].equals("HUMAN")) {
+                    image.setImageDrawable(blueGhost);
+                } else {
+                    image.setImageDrawable(aiBlue);
                 }
-            });
-            dialog.setCancelable(false);
-            dialog.setCanceledOnTouchOutside(false); //disable back button out
+                break;
+            case 1:
+                if (playerTypes[player].equals("HUMAN")) {
+                    image.setImageDrawable(redGhost);
+                } else {
+                    image.setImageDrawable(aiRed);
+                }
+                break;
+            case 2:
+                if (playerTypes[player].equals("HUMAN")) {
+                    image.setImageDrawable(greenGhost);
+                } else {
+                    image.setImageDrawable(aiGreen);
+                }
+                break;
+            case 3:
+                if (playerTypes[player].equals("HUMAN")) {
+                    image.setImageDrawable(orangeGhost);
+                } else {
+                    image.setImageDrawable(aiOrange);
+                }
+                break;
+        }
 
-            dialog.show();
+
+        final int aiPlayer = player;
+
+        //If button is clicked, close the custom dialog
+        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+        dialogButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (playerTypes[aiPlayer].equals("AI"))
+                {
+                    aiTurn(aiPlayer);
+                }
+
+                dialog.dismiss();
+
+                //Start the timer for a human player
+                if (playerTypes[aiPlayer].equals("HUMAN")){
+                    //Countdown Timer
+                    timer = new CountDownTimer(time, 1000) {
+                        TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            timerTextView.setText(Long.toString(millisUntilFinished / 1000));
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            boolean gameNotOver = addLetter(currentPlayer);
+                            if (gameNotOver)
+                            {
+                                roundEndDialog("Time's Up!");
+                            }else
+                            {
+                                endGame();//End the game and go to results screen
+                            }
+
+                        }
+                    }.start();
+                }
+
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false); //disable back button out
+        dialog.show();
     }
 
     public void aiTurn(int player)
@@ -550,7 +548,7 @@ public class GameScreenActivity extends Activity {
             {
                 gameNotOver = addLetter(currentPlayer); //add a letter to the player who challenged
             }else{
-               gameNotOver = addLetter(previousPlayer); //add a letter for failed challenge
+                gameNotOver = addLetter(previousPlayer); //add a letter for failed challenge
             }
             if (gameNotOver) {
                 currentWord = "";
