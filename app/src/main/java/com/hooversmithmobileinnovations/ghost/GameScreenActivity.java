@@ -498,7 +498,7 @@ public class GameScreenActivity extends Activity {
     {
         //Check that we are not on a new word (previousPlayer = -1)
         if (previousPlayer >= 0)
-        {
+          {timer.cancel();
             Intent intent = new Intent(this, ChallengeActivity.class);
             int playerBeingChallenged = previousPlayer;
 
@@ -510,20 +510,18 @@ public class GameScreenActivity extends Activity {
             {
                 List<String> list = dbHandler.getSuggestions(currentWord);
                 boolean gameNotOver;
-                if(list.size()==0)//todo chance bad guess
+                String message;
+                if(list.size()<1)//todo chance bad guess
                 {
                     gameNotOver = addLetter(previousPlayer);
+                    message = "Challenge Lost!";
                 }else
                 {
                     gameNotOver = addLetter(currentPlayer); //add a letter to AI for failed challenge
+                    message = list.get(1);
                 }
                 if (gameNotOver) {
-                    currentWord = "";
-                    previousPlayer = -1;
-                    currentWordTextView.setText(currentWord);
-                    currentPlayer = nextPlayer(playerTurn);
-                    playerTurn++;
-                    playerTurn(currentPlayer);
+                    roundEndDialog(message);
                 }
                 else
                 {
@@ -551,12 +549,7 @@ public class GameScreenActivity extends Activity {
                 gameNotOver = addLetter(previousPlayer); //add a letter for failed challenge
             }
             if (gameNotOver) {
-                currentWord = "";
-                previousPlayer = -1;
-                currentWordTextView.setText(currentWord);
-                currentPlayer = nextPlayer(playerTurn);
-                playerTurn++;
-                playerTurn(currentPlayer);
+                roundEndDialog(data.getExtras().getString("challengeResult"));
             }
             else
             {

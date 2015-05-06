@@ -25,6 +25,7 @@ public class ChallengeActivity extends Activity {
     Button backspace;
     MyDBHandler dbHandler;
     boolean isChallengeWon;
+    String challengeResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,22 +88,25 @@ public void onSubmit(View v)
 
     if (finalGuess.length() < 4)
     {
-        Toast toast = Toast.makeText(getBaseContext(), "You lose the challenge,the word is too short!", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+        challengeResult = "Challenge Lost!";
+       // Toast toast = Toast.makeText(getBaseContext(), "You lose the challenge,the word is too short!", Toast.LENGTH_SHORT);
+       // toast.setGravity(Gravity.CENTER, 0, 0);
+       // toast.show();
         isChallengeWon = false;
         finish();
     }else if (dbHandler.checkWord(finalGuess.toLowerCase())) {
-        Toast toast = Toast.makeText(getBaseContext(), "You win the Challenge!", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+       // Toast toast = Toast.makeText(getBaseContext(), "You win the Challenge!", Toast.LENGTH_SHORT);
+       // toast.setGravity(Gravity.CENTER, 0, 0);
+       // toast.show();
+        challengeResult = finalGuess;
         isChallengeWon = true;
         finish();
     }else
     {
-        Toast toast = Toast.makeText(getBaseContext(), "Not a valid word.", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+        challengeResult = "Challenge Lost!";
+       // Toast toast = Toast.makeText(getBaseContext(), "Not a valid word.", Toast.LENGTH_SHORT);
+       // toast.setGravity(Gravity.CENTER, 0, 0);
+        //toast.show();
         isChallengeWon = false;
         finish();
     }
@@ -110,6 +114,7 @@ public void onSubmit(View v)
     public void finish()
     {
         Intent data  = new Intent();
+        data.putExtra("challengeResult", challengeResult);
         data.putExtra("isChallengeWon", isChallengeWon);
         setResult(RESULT_OK, data);
         super.finish();
