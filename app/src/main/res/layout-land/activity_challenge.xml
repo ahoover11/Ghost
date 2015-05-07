@@ -332,7 +332,8 @@
             android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:textColor="#ffff050e" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -348,9 +349,9 @@
             android:text="@string/Backspace"
             android:id="@+id/buttonBackspace"
             android:layout_width="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
     <LinearLayout
@@ -366,7 +367,7 @@
             android:layout_height="fill_parent"
             android:text="TIME: "
             android:id="@+id/textViewTimeChallenge"
-            android:textSize="35sp"
+            android:textSize="25sp"
             android:textColor="#ffffff"
             android:layout_weight="0.5"
             android:layout_gravity="center"
@@ -379,7 +380,7 @@
             android:text="00"
             android:id="@+id/textViewTimerChallenge"
             android:layout_weight="0.5"
-            android:textSize="35sp"
+            android:textSize="25sp"
             android:textColor="#ffffff"
             android:textStyle="bold" />
     </LinearLayout>
