@@ -304,11 +304,12 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
-        android:layout_above="@+id/buttonSubmit">
+        android:layout_above="@+id/buttonSubmit"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="102dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -358,6 +359,37 @@
         android:layout_marginBottom="20dp"
         android:textColor="#ffff050e"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout7"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="TIME: "
+            android:id="@+id/textViewTimeChallenge"
+            android:textSize="35sp"
+            android:textColor="#ffffff"
+            android:layout_weight="0.5"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="00"
+            android:id="@+id/textViewTimerChallenge"
+            android:layout_weight="0.5"
+            android:textSize="35sp"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 
 </RelativeLayout>

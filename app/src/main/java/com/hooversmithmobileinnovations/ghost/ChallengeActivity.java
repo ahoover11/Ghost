@@ -1,8 +1,11 @@
 package com.hooversmithmobileinnovations.ghost;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,7 +13,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,50 +24,151 @@ public class ChallengeActivity extends Activity {
 
     boolean challengeWon;
     Vibrator myVib;
-    int playerChallenged;
-    String currentWord, currentGuess;
+    int playerChallenged, playerNumbers[];
+    String currentWord, currentGuess, challengeResult, playerNames[], playerTypes[];
     TextView currentWordTextView, endingTextView;
     Button backspace;
     MyDBHandler dbHandler;
     boolean isChallengeWon;
-    String challengeResult;
+    Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange;
+    CountDownTimer timer;
+    long time = 60000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge);
-        backspace = (Button) findViewById(R.id.buttonBackspace);
+
+        backspace = (Button)findViewById(R.id.buttonBackspace);
+        currentWordTextView = (TextView)findViewById(R.id.textViewWordStart);
+        endingTextView = (TextView)findViewById(R.id.endingTextView);
+
         backspace.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {onBackspace();}
-    });
+            public void onClick(View v) {
+                onBackspace();
+            }
+        });
 
-        currentWordTextView = (TextView) findViewById(R.id.textViewWordStart);
-        endingTextView =(TextView) findViewById(R.id.endingTextView);
         if(savedInstanceState == null ) //for first time
         {
-        currentGuess = "";}
-        else
-        {
+            currentGuess = "";
+
+            Bundle bundle = getIntent().getExtras();
+            if(bundle != null) {
+                playerChallenged = bundle.getInt("player");
+                currentWord = bundle.getString("currentWord");
+                playerNames = bundle.getStringArray("playerNames");
+                playerTypes = bundle.getStringArray("playerTypes");
+                playerNumbers = bundle.getIntArray("playerNumbers");
+            }
+        }
+        else {
             currentGuess = savedInstanceState.getString("currentGuess");
-            endingTextView.setText(currentGuess);
+            playerChallenged = savedInstanceState.getInt("player");
+            currentWord = savedInstanceState.getString("currentWord");
+            playerNames = savedInstanceState.getStringArray("playerNames");
+            playerTypes = savedInstanceState.getStringArray("playerTypes");
+            playerNumbers = savedInstanceState.getIntArray("playerNumbers");
+            time = savedInstanceState.getLong("time");
+
+            timer = (CountDownTimer) getLastNonConfigurationInstance();
+            if(timer != null) {
+                timer.cancel();
+            }
         }
+
+        TextView timerTextView = (TextView)findViewById(R.id.textViewTimerChallenge);
+        timerTextView.setText(Long.toString(time / 1000));
+
         endingTextView.setText(currentGuess);
-        myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras ==null)
-        {
-            return;
-        }
-
-        playerChallenged = extras.getInt("player");
-        currentWord = extras.getString("currentWord");
-
         currentWordTextView.setText(currentWord);
+
+        myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
         dbHandler = new MyDBHandler(this,null,null,1);
 
+        blueGhost = getResources().getDrawable(R.drawable.blueghost);
+        redGhost = getResources().getDrawable(R.drawable.redghost);
+        greenGhost = getResources().getDrawable(R.drawable.greenghost);
+        orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
+        aiBlue = getResources().getDrawable(R.drawable.aiblue);
+        aiRed = getResources().getDrawable(R.drawable.aired);
+        aiGreen = getResources().getDrawable(R.drawable.aigreen);
+        aiOrange = getResources().getDrawable(R.drawable.aiorange);
+
+        beginChallenge();
+    }
+
+    public void beginChallenge(){
+        //Dialog that depicts which player's turn it is
+        final Dialog dialog = new Dialog(ChallengeActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.next_turn_popup);
+
+        TextView text = (TextView) dialog.findViewById(R.id.popupPlayerTextView);
+        text.setText(playerNames[playerChallenged]);
+        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+        switch (playerNumbers[playerChallenged]) {
+            case 0:
+                if (playerTypes[playerChallenged].equals("HUMAN")) {
+                    image.setImageDrawable(blueGhost);
+                } else {
+                    image.setImageDrawable(aiBlue);
+                }
+                break;
+            case 1:
+                if (playerTypes[playerChallenged].equals("HUMAN")) {
+                    image.setImageDrawable(redGhost);
+                } else {
+                    image.setImageDrawable(aiRed);
+                }
+                break;
+            case 2:
+                if (playerTypes[playerChallenged].equals("HUMAN")) {
+                    image.setImageDrawable(greenGhost);
+                } else {
+                    image.setImageDrawable(aiGreen);
+                }
+                break;
+            case 3:
+                if (playerTypes[playerChallenged].equals("HUMAN")) {
+                    image.setImageDrawable(orangeGhost);
+                } else {
+                    image.setImageDrawable(aiOrange);
+                }
+                break;
+        }
+
+
+        //If button is clicked, close the custom dialog
+        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                //Countdown Timer
+                timer = new CountDownTimer(time, 1000) {
+                    TextView timerTextView = (TextView)findViewById(R.id.textViewTimerChallenge);
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        timerTextView.setText(Long.toString(millisUntilFinished / 1000));
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        TextView timerTextView = (TextView)findViewById(R.id.textViewTimerChallenge);
+                        timerTextView.setText("0");
+                        onSubmit(timerTextView);
+                    }
+                }.start();
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false); //disable back button out
+        dialog.show();
     }
 
 
@@ -89,35 +195,32 @@ public class ChallengeActivity extends Activity {
 
     }
 
-public void onSubmit(View v)
-{
-    String finalGuess = currentWord+currentGuess;
+    public void onSubmit(View v)
+    {
+        String finalGuess = currentWord+currentGuess;
 
-    if (finalGuess.length() < 4)
-    {
-        challengeResult = "Challenge Lost!";
-       // Toast toast = Toast.makeText(getBaseContext(), "You lose the challenge,the word is too short!", Toast.LENGTH_SHORT);
-       // toast.setGravity(Gravity.CENTER, 0, 0);
-       // toast.show();
-        isChallengeWon = false;
-        finish();
-    }else if (dbHandler.checkWord(finalGuess.toLowerCase())) {
-       // Toast toast = Toast.makeText(getBaseContext(), "You win the Challenge!", Toast.LENGTH_SHORT);
-       // toast.setGravity(Gravity.CENTER, 0, 0);
-       // toast.show();
-        challengeResult = finalGuess;
-        isChallengeWon = true;
-        finish();
-    }else
-    {
-        challengeResult = "Challenge Lost!";
-       // Toast toast = Toast.makeText(getBaseContext(), "Not a valid word.", Toast.LENGTH_SHORT);
-       // toast.setGravity(Gravity.CENTER, 0, 0);
-        //toast.show();
-        isChallengeWon = false;
-        finish();
+        //Stop the timer
+        if(timer != null) {
+            timer.cancel();
+        }
+
+        if (finalGuess.length() < 4)
+        {
+            challengeResult = "Challenge Lost!";
+            isChallengeWon = false;
+            finish();
+        }else if (dbHandler.checkWord(finalGuess.toLowerCase())) {
+            challengeResult = finalGuess;
+            isChallengeWon = true;
+            finish();
+        }else
+        {
+            challengeResult = "Challenge Lost!";
+            isChallengeWon = false;
+            finish();
+        }
     }
-}
+
     public void finish()
     {
         Intent data  = new Intent();
@@ -150,9 +253,25 @@ public void onSubmit(View v)
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public Object onRetainNonConfigurationInstance() {
+        return timer;
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
         outState.putString("currentGuess", currentGuess);
+        outState.putInt("player", playerChallenged);
+        outState.putString("currentWord", currentWord);
+        outState.putStringArray("playerNames", playerNames);
+        outState.putStringArray("playerTypes", playerTypes);
+        outState.putIntArray("playerNumbers", playerNumbers);
+
+        TextView timerTextView = (TextView)findViewById(R.id.textViewTimerChallenge);
+        time = Long.parseLong(timerTextView.getText().toString());
+        outState.putLong("time", time * 1000);
+        if(timer != null) {
+            timer.cancel();
+        }
         super.onSaveInstanceState(outState);
     }
 

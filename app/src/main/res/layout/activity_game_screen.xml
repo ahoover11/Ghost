@@ -466,7 +466,8 @@
             android:id="@+id/textViewTimer"
             android:layout_weight="0.5"
             android:textSize="35sp"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

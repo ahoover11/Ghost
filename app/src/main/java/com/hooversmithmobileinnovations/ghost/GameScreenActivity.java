@@ -57,7 +57,7 @@ public class GameScreenActivity extends Activity {
             currentWord = "";
             currentPlayer = 0;
             previousPlayer = -1;
-            timerOff =true;
+            timerOff = true;
 
             //Initialize arrays to store player information
             playerNames = new String[MAX_NUMBER_PLAYERS];
@@ -226,8 +226,6 @@ public class GameScreenActivity extends Activity {
     }
     public void roundEndDialog(String endingWord)
     {
-
-
         if(timer != null) {
             timer.cancel();
         }
@@ -347,7 +345,7 @@ public class GameScreenActivity extends Activity {
 
                         @Override
                         public void onFinish() {
-                        timeUp();
+                            timeUp();
                             timerTextView.setText("0");
 
                             if(timer != null) {
@@ -535,11 +533,18 @@ public class GameScreenActivity extends Activity {
                 timer.cancel();
             }
             timerOff = true;
-            Intent intent = new Intent(this, ChallengeActivity.class);
+
             int playerBeingChallenged = previousPlayer;
 
-            intent.putExtra("player", playerBeingChallenged);
-            intent.putExtra("currentWord", currentWord);
+            Intent intent = new Intent(this, ChallengeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("player", playerBeingChallenged);
+            bundle.putString("currentWord", currentWord);
+            bundle.putStringArray("playerNames", playerNames);
+            bundle.putIntArray("playerNumbers", playerNumbers);
+            bundle.putStringArray("playerTypes", playerTypes);
+            intent.putExtras(bundle);
+
             if (playerTypes[previousPlayer].equals("HUMAN")) {
                 startActivityForResult(intent, CHALLENGE_REQUEST);
             }else//AI
