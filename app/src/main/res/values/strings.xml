@@ -30,13 +30,19 @@
     <string name="TIME">TIME:</string>
     <string name="title_activity_rules">RulesActivity</string>
     <string name="Back">BACK</string>
-    <string name="Rules1">Ghost is an epic word game of strategy and lexicographical knowledge.
-    </string>
-    <string name="Rules2">        Players take turns adding letters to the end of a sequence of letters.
-        Unlike typical word games, the goal is to NOT generate a word. As with the basketball shooting games of "HORSE" or "PIG," players are assigned letters in the word "GHOST" if they complete a word.</string>
-    <string name="Rules3">Challenges
-    </string>
-    <string name="RulesAck">Background images derived from images of space:  Courtesy NASA/JPL-Caltech \n The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License.
-    </string>
+
+    <string name="RulesTitle">Ghost is an epic word game of strategy and lexicographical knowledge.</string>
+    <string name="RulesPlayerTurns">Player Turns</string>
+    <string name="Rules1">Players take turns adding letters to the end of a sequence of letters.
+                          Unlike typical word games, the goal is to NOT generate a word. Note that only words greater than 3 letters count as completed words.
+                          As with the basketball shooting games of "HORSE" or "PIG," players are assigned letters of the word "GHOST" if they complete
+                          a word. When a player fully constructs the word "GHOST," they are eliminated from the game. The last player remaining wins!</string>
+    <string name="RulesChallenges">Challenges</string>
+    <string name="Rules2">A player has the option to challenge the previous player if they think that the previous player is bluffing. When a player is challenged, they must be able to
+                          create a word using the current sequence of letters. If the player fails to create a word, they receive a letter, but if the
+                          player is able to create a word, the player who challenged them receives a letter.</string>
+    <string name="RulesAck">Acknowledgements</string>
+    <string name="Rules3">Background images derived from images of space: Courtesy NASA/JPL-Caltech \n The Android robot is reproduced or modified
+                          from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License.</string>
 
 </resources>

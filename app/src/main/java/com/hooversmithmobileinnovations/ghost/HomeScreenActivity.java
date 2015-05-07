@@ -36,7 +36,7 @@ public class HomeScreenActivity extends Activity {
         orangeGhost = getResources().getDrawable(R.drawable.orangeghost);
 
         localGameButton = (Button)findViewById(R.id.buttonNewGame);
-       // p2pGameButton = (Button)findViewById(R.id.buttonP2PGame);
+        // p2pGameButton = (Button)findViewById(R.id.buttonP2PGame);
         rulesButton = (Button)findViewById(R.id.buttonRules);
 
         ctd = new CyclicTransitionDrawable(new Drawable[] {blueGhost,redGhost,greenGhost,orangeGhost});
