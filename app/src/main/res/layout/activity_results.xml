@@ -167,31 +167,42 @@
 
     </LinearLayout>
 
-    <Button
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/NewGame"
-        android:id="@+id/buttonNewGame"
-        android:layout_marginTop="23dp"
-        android:background="@drawable/letterbutton"
-        style="@style/standard_button_resultsscreen_portrait"
+        android:layout_height="match_parent"
         android:layout_below="@+id/linearLayout3"
-        android:layout_alignLeft="@+id/buttonHomeScreen"
-        android:layout_alignStart="@+id/buttonHomeScreen"
-        android:layout_alignRight="@+id/buttonHomeScreen"
-        android:layout_alignEnd="@+id/buttonHomeScreen"
-        android:onClick="onButtonClickedResultsScreen" />
+        android:layout_centerHorizontal="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home Screen"
-        android:id="@+id/buttonHomeScreen"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        style="@style/standard_button_resultsscreen_portrait"
-        android:background="@drawable/letterbutton"
-        android:onClick="onButtonClickedResultsScreen" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/NewGame"
+            android:id="@+id/buttonNewGame"
+            android:background="@drawable/letterbutton"
+            style="@style/standard_button_resultsscreen_portrait"
+            android:layout_below="@+id/linearLayout3"
+            android:layout_alignLeft="@+id/buttonHomeScreen"
+            android:layout_alignStart="@+id/buttonHomeScreen"
+            android:layout_alignRight="@+id/buttonHomeScreen"
+            android:layout_alignEnd="@+id/buttonHomeScreen"
+            android:onClick="onButtonClickedResultsScreen"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Screen"
+            android:id="@+id/buttonHomeScreen"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="34dp"
+            style="@style/standard_button_resultsscreen_portrait"
+            android:background="@drawable/letterbutton"
+            android:onClick="onButtonClickedResultsScreen"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
 </RelativeLayout>
