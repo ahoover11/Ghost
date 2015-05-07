@@ -262,6 +262,7 @@ public class GameScreenActivity extends Activity {
         dialog.setCanceledOnTouchOutside(false); //disable back button out
         dialog.show();
     }
+
     public void playerTurn(int player)
     {
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
