@@ -537,16 +537,17 @@ public class GameScreenActivity extends Activity {
 
             int playerBeingChallenged = previousPlayer;
 
-            Intent intent = new Intent(this, ChallengeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("player", playerBeingChallenged);
-            bundle.putString("currentWord", currentWord);
-            bundle.putStringArray("playerNames", playerNames);
-            bundle.putIntArray("playerNumbers", playerNumbers);
-            bundle.putStringArray("playerTypes", playerTypes);
-            intent.putExtras(bundle);
+
 
             if (playerTypes[previousPlayer].equals("HUMAN")) {
+                Intent intent = new Intent(this, ChallengeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("player", playerBeingChallenged);
+                bundle.putString("currentWord", currentWord);
+                bundle.putStringArray("playerNames", playerNames);
+                bundle.putIntArray("playerNumbers", playerNumbers);
+                bundle.putStringArray("playerTypes", playerTypes);
+                intent.putExtras(bundle);
                 startActivityForResult(intent, CHALLENGE_REQUEST);
             }else//AI
             {
