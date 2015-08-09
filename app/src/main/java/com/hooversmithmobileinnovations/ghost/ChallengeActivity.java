@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -31,6 +32,7 @@ public class ChallengeActivity extends Activity {
     boolean isChallengeWon;
     Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange;
     CountDownTimer timer;
+    TextView timerTextView;
     final static long timeLimit = 60000; //30 second time limit for each turn
     Dialog dialogPlayerC;
     long time;
@@ -77,7 +79,7 @@ public class ChallengeActivity extends Activity {
 
         }
 
-        TextView timerTextView = (TextView)findViewById(R.id.textViewTimerChallenge);
+        timerTextView = (TextView)findViewById(R.id.textViewTimerChallenge);
         timerTextView.setText(Long.toString(time / 1000));
 
         endingTextView.setText(currentGuess);
@@ -154,6 +156,10 @@ public class ChallengeActivity extends Activity {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         timerTextView.setText(Long.toString(millisUntilFinished / 1000));
+                        if (millisUntilFinished < timeLimit*0.25)//Set text color to red if 1/4 of time left
+                        {
+                            timerTextView.setTextColor(Color.RED);
+                        }
                     }
 
                     @Override

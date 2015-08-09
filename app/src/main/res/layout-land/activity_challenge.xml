@@ -271,29 +271,33 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
         android:layout_above="@+id/VLinearLayout3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="42dp">
+        android:layout_marginBottom="42dp"
+        android:weightSum="2">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <HorizontalScrollView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/DefaultWord"
-            android:id="@+id/textViewWordStart"
-            android:textSize="45sp"
-            android:textStyle="bold"
-            android:typeface="normal"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="#ffffff"
-            android:layout_gravity="center_vertical"
-            android:textIsSelectable="true" />
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/DefaultWord"
+                android:id="@+id/textViewWordStart"
+                android:textSize="45sp"
+                android:textStyle="bold"
+                android:typeface="normal"
+                android:textColor="#ffffff"
+                android:textIsSelectable="false"
+                android:maxLines="1"
+                android:gravity="right" />
+        </HorizontalScrollView>
 
-        <HorizontalScrollView android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+        <HorizontalScrollView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -301,12 +305,10 @@
             android:id="@+id/endingTextView"
             android:textSize="45sp"
             android:textStyle="bold"
-            android:typeface="normal"
-            android:gravity="center_vertical|center_horizontal"
             android:textColor="#ffff050e"
-            android:layout_gravity="center_vertical"
             android:scrollHorizontally="true"
             android:maxLines="1"/>
+
         </HorizontalScrollView>
 
     </LinearLayout>

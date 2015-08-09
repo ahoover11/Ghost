@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import  	android.text.method.ScrollingMovementMethod;
+
 
 
 public class GameScreenActivity extends Activity {
 
-    TextView currentLetterTextView, currentWordTextView, playerScoreTextView[], playerNameTextView[]; //TextViews objects
+    TextView currentLetterTextView, currentWordTextView, playerScoreTextView[], playerNameTextView[], timerTextView; //TextViews objects
     Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange; //Drawable objects for player types
     int currentPlayer, numberOfPlayers, playerTurn, previousPlayer, playerNumbers[], playerRanks[],dropOutCounter; //Ints to store the current player, the total number of players, the player turn, the previous player, player numbers, player ranks, and counter used to keep track of players as they drop out of the gam
     String currentWord, currentLetter, playerScores[], playerNames[], playerTypes[], roundEndMessage; //Strings to store the current word, current letter, player scores, player names, and player types
@@ -134,6 +134,7 @@ public class GameScreenActivity extends Activity {
 
         currentLetterTextView = (TextView) findViewById(R.id.textViewCurrentLetter);
         currentWordTextView = (TextView) findViewById(R.id.textViewCurrentWord);
+        timerTextView = (TextView)findViewById(R.id.textViewTimer);
 
 
 
@@ -273,7 +274,7 @@ public class GameScreenActivity extends Activity {
 
     public void playerTurn(int player)
     {
-        TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
+        timerTextView.setTextColor(Color.WHITE);
         timerTextView.setText(Long.toString(time/1000)); //convert to seconds and set timer
 
         //Set all player names to black if it is not their turn
@@ -332,7 +333,7 @@ public class GameScreenActivity extends Activity {
             public void onClick(View v) {
                 if (playerTypes[aiPlayer].equals("AI"))
                 {
-                    aiTurn(aiPlayer);       // TODO: 8/8/2015 Add Thinking dialog or change picture when AI is playing?
+                    aiTurn();       // TODO: 8/8/2015 Add Thinking dialog or change picture when AI is playing?
                 } else if (playerTypes[aiPlayer].equals("HUMAN")){
                     dialogPlayer.cancel();
                     dialogPlayer = null;
@@ -343,11 +344,16 @@ public class GameScreenActivity extends Activity {
                         @Override
                         public void onTick(long millisUntilFinished) {
                             timerTextView.setText(Long.toString(millisUntilFinished / 1000));
+                            if (millisUntilFinished < timeLimit*0.25)//Set text color to red if 1/4 of time left
+                            {
+                                timerTextView.setTextColor(Color.RED);
+                            }
                         }
                         @Override
                         public void onFinish() {
                             timeUp();
                             timerTextView.setText("0");
+                            timerTextView.setTextColor(Color.WHITE);
                             if(timer != null) {
                                 timer.cancel();
                                 timer = null;
@@ -376,7 +382,7 @@ public class GameScreenActivity extends Activity {
         }
     }
 
-    public void aiTurn(int player)
+    public void aiTurn()
     {
         Random r = new Random();                    //For random selections
         char guess= (char) (r.nextInt(26) + 'A');   //Default random letter
@@ -546,6 +552,7 @@ public class GameScreenActivity extends Activity {
                 if (timer != null) {
                     timer.cancel();
                     timer = null;
+                    timerTextView.setTextColor(Color.WHITE);
                 }
                 timerOff = true;
 
