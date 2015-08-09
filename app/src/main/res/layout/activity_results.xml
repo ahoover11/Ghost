@@ -99,7 +99,7 @@
         android:id="@+id/linearLayout4"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/linearLayout2"
-        android:transitionGroup="true">
+        >
 
         <ImageView
             android:layout_width="65dp"
@@ -181,11 +181,6 @@
             android:id="@+id/buttonNewGame"
             android:background="@drawable/letterbutton"
             style="@style/standard_button_resultsscreen_portrait"
-            android:layout_below="@+id/linearLayout3"
-            android:layout_alignLeft="@+id/buttonHomeScreen"
-            android:layout_alignStart="@+id/buttonHomeScreen"
-            android:layout_alignRight="@+id/buttonHomeScreen"
-            android:layout_alignEnd="@+id/buttonHomeScreen"
             android:onClick="onButtonClickedResultsScreen"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
@@ -196,8 +191,6 @@
             android:layout_height="wrap_content"
             android:text="Home Screen"
             android:id="@+id/buttonHomeScreen"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_marginBottom="34dp"
             style="@style/standard_button_resultsscreen_portrait"
             android:background="@drawable/letterbutton"

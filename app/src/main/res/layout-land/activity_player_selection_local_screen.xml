@@ -149,7 +149,6 @@
         android:text="@string/StartGame"
         android:id="@+id/buttonStartGame"
         android:onClick="onButtonClickedLocalSelectionScreen"
-        android:layout_weight="0.5"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

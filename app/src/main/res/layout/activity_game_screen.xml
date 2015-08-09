@@ -371,21 +371,22 @@
                 android:gravity="center_horizontal" />
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
+    <HorizontalScrollView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/relativeLayout"
+        android:layout_marginBottom="100dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:text="@string/DefaultWord"
         android:id="@+id/textViewCurrentWord"
         android:textSize="65sp"
         android:textStyle="bold"
         android:typeface="normal"
-        android:gravity="center_vertical|center_horizontal"
         android:textColor="#fff"
-        android:layout_above="@+id/relativeLayout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="100dp" />
+        android:scrollHorizontally="true"
+        android:maxLines="1" />
+    </HorizontalScrollView>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -433,7 +434,6 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="15dp"
             android:layout_gravity="top"
-            android:textAlignment="center"
             android:text="A" />
 
     </RelativeLayout>

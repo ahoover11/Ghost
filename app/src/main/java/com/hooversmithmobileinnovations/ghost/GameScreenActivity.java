@@ -20,11 +20,11 @@ import android.app.Dialog;
 import android.os.Vibrator;
 import android.widget.Button;
 import android.view.Window;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import  	android.text.method.ScrollingMovementMethod;
 
 
 public class GameScreenActivity extends Activity {
@@ -32,17 +32,18 @@ public class GameScreenActivity extends Activity {
     TextView currentLetterTextView, currentWordTextView, playerScoreTextView[], playerNameTextView[]; //TextViews objects
     Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange; //Drawable objects for player types
     int currentPlayer, numberOfPlayers, playerTurn, previousPlayer, playerNumbers[], playerRanks[],dropOutCounter; //Ints to store the current player, the total number of players, the player turn, the previous player, player numbers, player ranks, and counter used to keep track of players as they drop out of the gam
-    String currentWord, currentLetter, playerScores[], playerNames[], playerTypes[]; //Strings to store the current word, current letter, player scores, player names, and player types
-    boolean playersInGame[], timerOff; //Boolean array that reflects active players
-    Vibrator myVib; //Vibrator object for haptic feedback
-    MyDBHandler dbHandler; //Database object used for dictionary lookup
-    final static int MAX_NUMBER_PLAYERS = 4; //Int that reflects the maximum possible number of players
-    final static int CHALLENGE_REQUEST = 1; //Int used to signify a challenge
-    double smartGuess = 0.7;
-    double dumbGuess = 0.95;
-    double challengeThreshold = 0.85;
-    CountDownTimer timer;
-    long time = 30000;
+    String currentWord, currentLetter, playerScores[], playerNames[], playerTypes[], roundEndMessage; //Strings to store the current word, current letter, player scores, player names, and player types
+    boolean playersInGame[], timerOff, roundDialog, challengeReturn; //Boolean array that reflects active players
+    final static int MAX_NUMBER_PLAYERS = 4, CHALLENGE_REQUEST = 1; //Int that reflects the maximum possible number of players and Int used to signify a challenge
+    double smartGuess = 0.7, dumbGuess = 0.95, challengeThreshold = 0.85, badChallengeThreshold = 0.03; // 70% Chance of a good guess 25% chance of a bad guess and 5% random and 85% chance of challenging when no valid words; 3% of challenging a good word
+    final static long timeLimit = 30000;        //30 second time limit for each turn
+    long time;
+    CountDownTimer timer;                       //Timer for limiting turn length
+    Vibrator myVib;                             //Vibrator object for haptic feedback
+    MyDBHandler dbHandler;                      //Database object used for dictionary lookup
+    Dialog dialogRoundEnd,dialogPlayer;         //Between turn dialogs
+
+    private static final  String TAG = "LOG";//For debugging
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +53,15 @@ public class GameScreenActivity extends Activity {
         //Initialize some default values
         if(savedInstanceState == null ) //for first time
         {
-            playerTurn = 0;
+            playerTurn = 0;         //Hold the turn order starting with the first player listed
+            currentPlayer = playerTurn;
+            previousPlayer = -1;    //-1 to indicate
             currentLetter = "";
-            currentWord = "";
-            currentPlayer = 0;
-            previousPlayer = -1;
+            currentWord = "";       //The string on which the word is built
             timerOff = true;
+            time = timeLimit;       //Set the time remaining to default time
+            roundDialog = false;
+            challengeReturn = false;
 
             //Initialize arrays to store player information
             playerNames = new String[MAX_NUMBER_PLAYERS];
@@ -89,12 +93,12 @@ public class GameScreenActivity extends Activity {
                     playerScores[i] = "";
                 }
             }
-
         }else //Restore state
         {
             playerTurn = savedInstanceState.getInt("playerTurn");
             currentLetter = savedInstanceState.getString("currentLetter");
             currentWord = savedInstanceState.getString("currentWord");
+            roundEndMessage = savedInstanceState.getString("roundEndMessage");
             currentPlayer = savedInstanceState.getInt("currentPlayer");
             previousPlayer = savedInstanceState.getInt("previousPlayer");
             dropOutCounter = savedInstanceState.getInt("dropOutCounter");
@@ -111,11 +115,9 @@ public class GameScreenActivity extends Activity {
             playerRanks = savedInstanceState.getIntArray("playerRanks");
 
             time = savedInstanceState.getLong("time");
-            timer = (CountDownTimer) getLastNonConfigurationInstance();
-            if(timer != null) {
-                timer.cancel();
-            }
             timerOff = savedInstanceState.getBoolean("timerOff");
+            roundDialog = savedInstanceState.getBoolean("roundDialog");
+            challengeReturn = savedInstanceState.getBoolean("challengeReturn");
         }
 
         playerScoreTextView = new TextView[MAX_NUMBER_PLAYERS];
@@ -133,9 +135,9 @@ public class GameScreenActivity extends Activity {
         currentLetterTextView = (TextView) findViewById(R.id.textViewCurrentLetter);
         currentWordTextView = (TextView) findViewById(R.id.textViewCurrentWord);
 
+
         currentLetterTextView.setText(currentLetter);
         currentWordTextView.setText(currentWord);
-
 
         blueGhost = getResources().getDrawable(R.drawable.blueghost);
         redGhost = getResources().getDrawable(R.drawable.redghost);
@@ -146,9 +148,7 @@ public class GameScreenActivity extends Activity {
         aiGreen = getResources().getDrawable(R.drawable.aigreen);
         aiOrange = getResources().getDrawable(R.drawable.aiorange);
 
-
-        dbHandler = new MyDBHandler(this,null,null,1);
-
+        dbHandler = new MyDBHandler(this,null,null,1);      //dbHandler to coordinate with the dictionary
         myVib = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
         //Update textViews to current player scores
@@ -165,32 +165,31 @@ public class GameScreenActivity extends Activity {
             playerNameTextView[i].setBackgroundColor(Color.TRANSPARENT);
             playerNameTextView[i].setText("");
         }
-
-        playerTurn(currentPlayer);
     }
 
     public void LetterClicked(View v)
     {
-        myVib.vibrate(80); //haptic feedback for key press
-        Resources res = getResources();
-        currentLetter=  res.getResourceEntryName(v.getId());
-        currentLetterTextView.setText(currentLetter);
+            myVib.vibrate(80); //haptic feedback for key press
+            Resources res = getResources();
+            currentLetter = res.getResourceEntryName(v.getId()); //Each button named with corresponding letter
+            currentLetterTextView.setText(currentLetter);
     }
 
     public void onSubmit(View v)
     {
         if (!currentLetter.equals("")) {
             //Append selected letter to current word and update textViews
-            currentWord += currentLetter;
-            currentWordTextView.setText(currentWord);
-            currentLetterTextView.setText("");
+            currentWord += currentLetter;               //Add the current letter to the word
+            currentWordTextView.setText(currentWord);   //Update the text view
+            currentLetterTextView.setText("");          //Reset the current letter text view
 
             //Stop the timer
             if(timer != null) {
                 timer.cancel();
+                timer = null;
             }
             timerOff = true;
-            time = 30000;
+            time = timeLimit;//Reset timer to default value
 
             //Only check if player created a word if length greater than 3
             if (currentWord.length() > 3) {
@@ -201,7 +200,6 @@ public class GameScreenActivity extends Activity {
                     boolean gameNotOver = addLetter(currentPlayer);
                     if (gameNotOver)
                     {
-                        //Toast.makeText(getBaseContext(), "Word Completed Round Finished", Toast.LENGTH_SHORT).show();
                         roundEndDialog(currentWord);
                     }else
                     {
@@ -220,53 +218,62 @@ public class GameScreenActivity extends Activity {
                 playerTurn(currentPlayer);
             }
         }
-
-        //Reset current letter;
-        currentLetter = "";
+        currentLetter = ""; //Reset current letter
     }
+
     public void roundEndDialog(String endingWord)
     {
         if(timer != null) {
             timer.cancel();
+            timer = null;
         }
         timerOff = true;
+        time = timeLimit;//Reset time
 
-        previousPlayer = -1;
-        currentWord = "";
-        currentWordTextView.setText(currentWord);
-        currentPlayer = nextPlayer(playerTurn);
-        playerTurn++;
-        time = 30000;
+        roundDialog = true;              // For displaying dialog on change of state
+        roundEndMessage = endingWord;    // Save the message
+
+
+
 
         //Dialog that depicts which player completed a word
-        final Dialog dialog = new Dialog(GameScreenActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.round_over_popup);
+        Activity a = GameScreenActivity.this; //Wait until challenge activity is closed
+        while (a.getParent() != null) {
+            a = a.getParent();
+        }
+        dialogRoundEnd = new Dialog(GameScreenActivity.this);
+        dialogRoundEnd.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogRoundEnd.setContentView(R.layout.round_over_popup);
 
-        TextView text = (TextView) dialog.findViewById(R.id.textViewFinalWord);
+        TextView text = (TextView) dialogRoundEnd.findViewById(R.id.textViewFinalWord);
         text.setText(endingWord);
-        //ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
-        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
-        dialogButton.setOnClickListener(new OnClickListener() {
+        Button dialogEndButton = (Button) dialogRoundEnd.findViewById(R.id.popupButton);
+        dialogEndButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
-                Activity a = GameScreenActivity.this;
-                while(a.getParent() != null) {
-                    a = a.getParent();
-                }
+                //Reset default values
+                previousPlayer = -1;
+                currentWord = "";
+                currentWordTextView.setText(currentWord);
+                currentPlayer = nextPlayer(playerTurn);
+                playerTurn++;
+
+                dialogRoundEnd.cancel();
+                dialogRoundEnd = null;
+                roundDialog = false;
+
                 playerTurn(currentPlayer);
             }
         });
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false); //disable back button out
-        dialog.show();
+        dialogRoundEnd.setCancelable(false);                //disable back button out
+        dialogRoundEnd.setCanceledOnTouchOutside(false);    //disable outside touch cancel
+        dialogRoundEnd.show();
     }
 
     public void playerTurn(int player)
     {
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
-        timerTextView.setText(Long.toString(time/1000));
+        timerTextView.setText(Long.toString(time/1000)); //convert to seconds and set timer
 
         //Set all player names to black if it is not their turn
         for (int i = 0; i < numberOfPlayers; i++)
@@ -277,15 +284,14 @@ public class GameScreenActivity extends Activity {
         //Set the active player's name to blue
         playerNameTextView[player].setTextColor(Color.BLUE);
 
-
         //Dialog that depicts which player's turn it is
-        final Dialog dialog = new Dialog(GameScreenActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.next_turn_popup);
+        dialogPlayer = new Dialog(GameScreenActivity.this);
+        dialogPlayer.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogPlayer.setContentView(R.layout.next_turn_popup);
 
-        TextView text = (TextView) dialog.findViewById(R.id.popupPlayerTextView);
+        TextView text = (TextView) dialogPlayer.findViewById(R.id.popupPlayerTextView);
         text.setText(playerNames[player]);
-        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+        ImageView image = (ImageView) dialogPlayer.findViewById(R.id.imageViewGhost);
         switch (playerNumbers[player]) {
             case 0:
                 if (playerTypes[player].equals("HUMAN")) {
@@ -317,51 +323,44 @@ public class GameScreenActivity extends Activity {
                 break;
         }
 
-
-        final int aiPlayer = player;
-
+        final int aiPlayer = player; //For use inside of onClickListener
         //If button is clicked, close the custom dialog
-        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+        Button dialogButton = (Button) dialogPlayer.findViewById(R.id.popupButton);
         dialogButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (playerTypes[aiPlayer].equals("AI"))
                 {
-                    aiTurn(aiPlayer);
-                }
-
-                dialog.dismiss();
-
-                //Start the timer for a human player
-                if (playerTypes[aiPlayer].equals("HUMAN")){
+                    aiTurn(aiPlayer);       // TODO: 8/8/2015 Add Thinking dialog or change picture when AI is playing?
+                } else if (playerTypes[aiPlayer].equals("HUMAN")){
+                    dialogPlayer.cancel();
+                    dialogPlayer = null;
                     //Countdown Timer
                     timerOff = false;
                     timer = new CountDownTimer(time, 1000) {
                         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
-
                         @Override
                         public void onTick(long millisUntilFinished) {
                             timerTextView.setText(Long.toString(millisUntilFinished / 1000));
                         }
-
                         @Override
                         public void onFinish() {
                             timeUp();
                             timerTextView.setText("0");
-
                             if(timer != null) {
                                 timer.cancel();
+                                timer = null;
                             }
                             timerOff = true;
+                            time = timeLimit;
                         }
                     }.start();
                 }
-
             }
         });
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false); //disable back button out
-        dialog.show();
+        dialogPlayer.setCancelable(false);              //disable back button out
+        dialogPlayer.setCanceledOnTouchOutside(false);
+        dialogPlayer.show();
     }
 
     public void timeUp()
@@ -378,25 +377,30 @@ public class GameScreenActivity extends Activity {
 
     public void aiTurn(int player)
     {
-        Random r = new Random();
-        char guess= (char) (r.nextInt(26) + 'A');
-        boolean challenge = false;
-        if (currentWord.length()==0)//Randomly select first letter
-        {//Do nothing
-        }else if (currentWord.length() == 1)
+        Random r = new Random();                    //For random selections
+        char guess= (char) (r.nextInt(26) + 'A');   //Default random letter
+        boolean challenge = false;                  //Determines whether the AI will challenge
+
+        if (currentWord.length() == 1) //If the word's length is zero, the default (random) letter is kept
         {
-            List<String> list = dbHandler.getSuggestions(currentWord);
-            guess = list.get(r.nextInt(list.size())).toCharArray()[currentWord.length()];
-        }else {
+            List<String> list = dbHandler.getSuggestions(currentWord);  //Return all words starting with the current string
+            guess = list.get(r.nextInt(list.size())).toCharArray()[1];  //Select second letter from a random word
+        }else if (currentWord.length()>1){
             List<String> list = dbHandler.getSuggestions(currentWord);//For suggestions
-            if (list.size() == 0&& r.nextDouble()< challengeThreshold) {
+            //Challenge some percent of time (challengeThreshold) if no valid words can be made, or randomly challenge (badChallengeThreshold)
+            if ((list.isEmpty()&& r.nextDouble()< challengeThreshold)|| r.nextDouble()<badChallengeThreshold) {
                 challenge = true;
+                //Remove the AI player dialog before the challenge which will initiate the round end dialog
+                if(dialogPlayer!=null) {
+                    dialogPlayer.cancel();
+                    dialogPlayer = null;
+                }
                 onChallenge(currentLetterTextView);
-            } else {
+            } else if(!list.isEmpty()) {                //If there are valid words, select one to 'think' of
                 List<String> smartList = new ArrayList<String>(); //For holding potentially good guesses
                 List<String> stupidList = new ArrayList<String>();//For holding potentially poor guesses
                 for (int i = 0; i < list.size(); i++) {
-                    int aiPosition = currentWord.length() % (dropOutCounter + 1);
+                    int aiPosition = currentWord.length() % (dropOutCounter + 1);       //Determine whether a word is potentially good or bad based on length
                     if (list.get(i).length() % (dropOutCounter + 1) - 1 == aiPosition||list.get(i).length()==currentWord.length() ) {
                         stupidList.add(list.get(i));
                     } else {
@@ -404,57 +408,57 @@ public class GameScreenActivity extends Activity {
                     }
                 }
 
-                //Shuffle the two lists
-                Collections.shuffle(smartList);
+                Collections.shuffle(smartList);//Shuffle the two lists
                 Collections.shuffle(stupidList);
 
-                double randomProb =r.nextDouble();
-                if (randomProb < smartGuess) {
-                    if (smartList.size() > 0 && smartList.get(0).length() > currentWord.length()) {
-                        int minLength = smartList.get(0).length();
-                        int numSearch = 5;//How many words to search through
-                        if (minLength > numSearch) {
-                            minLength = numSearch;//most searched
+                double randomProb = r.nextDouble(); //Used to determine which list to use (or the default letter)
+                if (randomProb < smartGuess&&!smartList.isEmpty()) {
+                        int maxWordsChecked =  5;//smartList.get(0).length();      //The maximum number of words that may be considered Larger number gives better guess, but slows down app (each word may have multiple calls to database)
+                        if (maxWordsChecked > smartList.size()) {
+                            maxWordsChecked = smartList.size();  //Most that can be searched
                         }
-                        int index = -1;
+                        int index = -1;     //Initialize index for searching will start with first word
                         boolean wordChosen = false;
-
                         do {
                             index++;
-                            boolean noSubwords = true;
-                            for (int i = currentWord.length(); i < smartList.get(index).length() - 1; i++) {
-                                if (dbHandler.checkWord(smartList.get(index).substring(0, i))) {
-                                    noSubwords = false;
-                                    break;
+                            boolean noSubWords = true;
+                            if ( currentWord.length() != smartList.get(index).length()) { //Make sure original word is not returned
+                                //Try to find a word form the smart list that has now shorter words contained in it
+                                for (int i = currentWord.length(); i < smartList.get(index).length() - 1; i++) {
+                                    if (dbHandler.checkWord(smartList.get(index).substring(0, i))) {
+                                        noSubWords = false;
+                                        break;
+                                    }
+                                }
+                                if (noSubWords) {
+                                    wordChosen = true;
                                 }
                             }
-                            if (noSubwords) {
-                                wordChosen = true;
-                            }
-                        } while (!wordChosen && index < minLength - 1);
-
+                        } while (!wordChosen && index < maxWordsChecked - 1);
                         guess = smartList.get(index).toCharArray()[currentWord.length()];
-                    }
                 }
-                else if (randomProb > smartGuess  && randomProb < dumbGuess&& stupidList.size()> 0 )
+                else if (randomProb < dumbGuess && !stupidList.isEmpty() )
                 {
                     if (stupidList.get(0).length() > currentWord.length())
-                        guess = stupidList.get(0).toCharArray()[currentWord.length()];
+                        guess = stupidList.get(0).toCharArray()[currentWord.length()]; //Select a word from the 'stupidList' (which has already been shuffled)
                 }
-
             }
         }
-
-        if (!challenge) {
+        if (!challenge)     //When there has not been a challenge, add the selected letter to the current word
+        {
+            //Remove dialog before next turn
+            if(dialogPlayer!=null) {
+                dialogPlayer.cancel();
+                dialogPlayer = null;
+            }
             currentLetter = ("" + guess).toUpperCase();
             onSubmit(currentLetterTextView);
         }
     }
 
-    private int nextPlayer(int lastPlayer)
+    public int nextPlayer(int lastPlayer)
     {
         int count = 1;
-
         do{
             if (playersInGame[(lastPlayer+count) % numberOfPlayers])
             {
@@ -462,12 +466,21 @@ public class GameScreenActivity extends Activity {
             }
             count++;
         }while(count<numberOfPlayers);
-
         return -1;
     }
 
     public void endGame()
     {
+        if (dialogRoundEnd!= null &&dialogRoundEnd.isShowing())
+        {
+            dialogRoundEnd.cancel();
+            dialogRoundEnd= null;
+        }
+        if (dialogPlayer!= null && dialogPlayer.isShowing())
+        {
+            dialogPlayer.cancel();
+            dialogPlayer = null;
+        }
         Toast toast = Toast.makeText(getBaseContext(), "Game Over!", Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
@@ -490,9 +503,9 @@ public class GameScreenActivity extends Activity {
         finish();
     }
 
-    private boolean addLetter(int player)
+    public boolean addLetter(int player)
     {
-        switch (playerScores[player].length())
+        switch (playerScores[player].length()) //Add the next letter to the loser's score
         {
             case 0:
                 playerScores[player] += "G";
@@ -507,7 +520,7 @@ public class GameScreenActivity extends Activity {
                 playerScores[player] += "S";
                 break;
             case 4:
-                playerScores[player] += "T";
+                playerScores[player] += "T"; // TODO: 8/8/2015 Add player lost dialog?
                 playerScoreTextView[player].setText(playerScores[player]);
                 playersInGame[player] = false;
                 playerRanks[player] = dropOutCounter;
@@ -520,67 +533,64 @@ public class GameScreenActivity extends Activity {
         return true;
     }
 
-    private boolean validWord(String word)
+    public boolean validWord(String word)
     {
         return dbHandler.checkWord(word);
     }
 
     public void onChallenge(View v)
     {
-        //Check that we are not on a new word (previousPlayer = -1)
-        if (previousPlayer >= 0)
-        {
-            if(timer != null) {
-                timer.cancel();
+            //Check that we are not on a new word (previousPlayer = -1)
+            if (previousPlayer >= 0) {
+                if (timer != null) {
+                    timer.cancel();
+                    timer = null;
+                }
+                timerOff = true;
+
+                int playerBeingChallenged = previousPlayer;
+
+                if (playerTypes[previousPlayer].equals("HUMAN")) {
+                    challengeReturn = true;
+                    Intent intent = new Intent(this, ChallengeActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("player", playerBeingChallenged);
+                    bundle.putString("currentWord", currentWord);
+                    bundle.putStringArray("playerNames", playerNames);
+                    bundle.putIntArray("playerNumbers", playerNumbers);
+                    bundle.putStringArray("playerTypes", playerTypes);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, CHALLENGE_REQUEST);
+                } else//AI
+                {
+                    List<String> list = dbHandler.getSuggestions(currentWord);
+                    boolean gameNotOver;
+                    String message;
+                    if (list == null || list.isEmpty())
+                    {
+                        gameNotOver = addLetter(previousPlayer);
+                        message = "Challenge Lost!";
+                    } else {
+                        gameNotOver = addLetter(currentPlayer); //add a letter to AI for failed challenge
+                        message = list.get(1);
+                    }
+                    if (gameNotOver) {
+                        roundEndDialog(message);
+                    } else {
+                        endGame();
+                    }
+                }
+            } else {
+                Toast toast = Toast.makeText(getBaseContext(), "No challenges yet, enter a letter!", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
-            timerOff = true;
-
-            int playerBeingChallenged = previousPlayer;
-
-
-
-            if (playerTypes[previousPlayer].equals("HUMAN")) {
-                Intent intent = new Intent(this, ChallengeActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("player", playerBeingChallenged);
-                bundle.putString("currentWord", currentWord);
-                bundle.putStringArray("playerNames", playerNames);
-                bundle.putIntArray("playerNumbers", playerNumbers);
-                bundle.putStringArray("playerTypes", playerTypes);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, CHALLENGE_REQUEST);
-            }else//AI
-            {
-                List<String> list = dbHandler.getSuggestions(currentWord);
-                boolean gameNotOver;
-                String message;
-                if(list.size()<1)
-                {
-                    gameNotOver = addLetter(previousPlayer);
-                    message = "Challenge Lost!";
-                }else
-                {
-                    gameNotOver = addLetter(currentPlayer); //add a letter to AI for failed challenge
-                    message = list.get(1);
-                }
-                if (gameNotOver) {
-                    roundEndDialog(message);
-                }
-                else
-                {
-                    endGame();
-                }
-            }
-        } else {
-            Toast toast = Toast.makeText(getBaseContext(), "No Challenges Yet, wait until the word is started!", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data )
     {
-        if(requestCode== CHALLENGE_REQUEST && resultCode == RESULT_OK)
+
+        if(requestCode == CHALLENGE_REQUEST && resultCode == RESULT_OK)
         {
             boolean gameNotOver;
             if (data.getExtras().getBoolean("isChallengeWon"))
@@ -617,15 +627,15 @@ public class GameScreenActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
         outState.putInt("playerTurn", playerTurn);
         outState.putString("currentLetter", currentLetter);
         outState.putString("currentWord", currentWord);
+        outState.putString("roundEndMessage",roundEndMessage);
         outState.putInt("currentPlayer", currentPlayer);
         outState.putInt("previousPlayer", previousPlayer);
         outState.putInt("dropOutCounter", dropOutCounter);
@@ -639,24 +649,55 @@ public class GameScreenActivity extends Activity {
 
         outState.putIntArray("playerRanks", playerRanks);
         outState.putBooleanArray("playersInGame", playersInGame);
+        outState.putBoolean("roundDialog", roundDialog);
+        outState.putBoolean("challengeReturn", challengeReturn);
 
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimer);
-        time = Long.parseLong(timerTextView.getText().toString());
-        outState.putLong("time",  time*1000);
+        time = Long.parseLong(timerTextView.getText().toString())*1000;
+        outState.putBoolean("timerOff", timerOff);
+        outState.putLong("time", time);
         if(timer != null) {
             timer.cancel();
+            timer = null;
         }
-        outState.putBoolean("timerOff", timerOff);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return timer;
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+         protected void onResume()
+    {
+        if (!roundDialog) {
+            playerTurn(currentPlayer);
+        }else if(!challengeReturn)
+        {
+            roundEndDialog(roundEndMessage);
+        }
+        challengeReturn = false;//For return from challenge to reactivate message
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+      if (dialogRoundEnd!= null &&dialogRoundEnd.isShowing())
+        {
+            dialogRoundEnd.cancel();
+            dialogRoundEnd= null;
+        }
+        if (dialogPlayer!= null && dialogPlayer.isShowing())
+        {
+            dialogPlayer.cancel();
+            dialogPlayer = null;
+        }
+        if(timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        super.onPause();
     }
 }

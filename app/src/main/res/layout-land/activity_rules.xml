@@ -34,8 +34,6 @@
             android:id="@+id/buttonBack"
             style="@style/standard_button_rulessscreen_portrait"
             android:background="@drawable/letterbutton"
-            android:layout_below="@+id/textViewRules"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp" />
     </LinearLayout>
 
@@ -58,7 +56,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"

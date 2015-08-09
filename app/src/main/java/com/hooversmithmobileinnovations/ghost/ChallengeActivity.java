@@ -31,7 +31,9 @@ public class ChallengeActivity extends Activity {
     boolean isChallengeWon;
     Drawable blueGhost, redGhost, greenGhost, orangeGhost, aiBlue, aiRed, aiGreen, aiOrange;
     CountDownTimer timer;
-    long time = 60000;
+    final static long timeLimit = 60000; //30 second time limit for each turn
+    Dialog dialogPlayerC;
+    long time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class ChallengeActivity extends Activity {
         backspace = (Button)findViewById(R.id.buttonBackspace);
         currentWordTextView = (TextView)findViewById(R.id.textViewWordStart);
         endingTextView = (TextView)findViewById(R.id.endingTextView);
+        time = timeLimit;
 
         backspace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,10 +74,7 @@ public class ChallengeActivity extends Activity {
             playerNumbers = savedInstanceState.getIntArray("playerNumbers");
             time = savedInstanceState.getLong("time");
 
-            timer = (CountDownTimer) getLastNonConfigurationInstance();
-            if(timer != null) {
-                timer.cancel();
-            }
+
         }
 
         TextView timerTextView = (TextView)findViewById(R.id.textViewTimerChallenge);
@@ -96,18 +96,18 @@ public class ChallengeActivity extends Activity {
         aiGreen = getResources().getDrawable(R.drawable.aigreen);
         aiOrange = getResources().getDrawable(R.drawable.aiorange);
 
-        beginChallenge();
+       // beginChallenge();
     }
 
     public void beginChallenge(){
         //Dialog that depicts which player's turn it is
-        final Dialog dialog = new Dialog(ChallengeActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.next_turn_popup);
+        dialogPlayerC = new Dialog(ChallengeActivity.this);
+        dialogPlayerC.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogPlayerC.setContentView(R.layout.next_turn_popup);
 
-        TextView text = (TextView) dialog.findViewById(R.id.popupPlayerTextView);
+        TextView text = (TextView) dialogPlayerC.findViewById(R.id.popupPlayerTextView);
         text.setText(playerNames[playerChallenged]);
-        ImageView image = (ImageView) dialog.findViewById(R.id.imageViewGhost);
+        ImageView image = (ImageView) dialogPlayerC.findViewById(R.id.imageViewGhost);
         switch (playerNumbers[playerChallenged]) {
             case 0:
                 if (playerTypes[playerChallenged].equals("HUMAN")) {
@@ -141,11 +141,11 @@ public class ChallengeActivity extends Activity {
 
 
         //If button is clicked, close the custom dialog
-        Button dialogButton = (Button) dialog.findViewById(R.id.popupButton);
+        Button dialogButton = (Button) dialogPlayerC.findViewById(R.id.popupButton);
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                dialogPlayerC.dismiss();
 
                 //Countdown Timer
                 timer = new CountDownTimer(time, 1000) {
@@ -165,9 +165,9 @@ public class ChallengeActivity extends Activity {
                 }.start();
             }
         });
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false); //disable back button out
-        dialog.show();
+        dialogPlayerC.setCancelable(false);
+        dialogPlayerC.setCanceledOnTouchOutside(false); //disable back button out
+        dialogPlayerC.show();
     }
 
 
@@ -198,9 +198,14 @@ public class ChallengeActivity extends Activity {
     {
         String finalGuess = currentWord+currentGuess;
 
-        //Stop the timer
+        if (dialogPlayerC!= null && dialogPlayerC.isShowing())
+        {
+            dialogPlayerC.cancel();
+            dialogPlayerC = null;
+        }
         if(timer != null) {
             timer.cancel();
+            timer = null;
         }
 
         if (finalGuess.length() < 4)
@@ -229,10 +234,7 @@ public class ChallengeActivity extends Activity {
         super.finish();
     }
 
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return timer;
-    }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -248,8 +250,30 @@ public class ChallengeActivity extends Activity {
         outState.putLong("time", time * 1000);
         if(timer != null) {
             timer.cancel();
+            timer = null;
         }
         super.onSaveInstanceState(outState);
+    }
+    @Override
+    protected void onResume()
+    {
+        beginChallenge();
+        super.onResume();
+    }
+    @Override
+    protected void onPause()
+    {
+
+        if (dialogPlayerC!= null && dialogPlayerC.isShowing())
+        {
+            dialogPlayerC.cancel();
+            dialogPlayerC = null;
+        }
+        if(timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        super.onPause();
     }
 
     @Override
