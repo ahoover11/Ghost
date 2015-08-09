@@ -136,6 +136,7 @@ public class GameScreenActivity extends Activity {
         currentWordTextView = (TextView) findViewById(R.id.textViewCurrentWord);
 
 
+
         currentLetterTextView.setText(currentLetter);
         currentWordTextView.setText(currentWord);
 
